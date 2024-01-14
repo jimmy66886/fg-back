@@ -1,0 +1,8 @@
+eems:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: eems
+    username: root
+    password: "010203"

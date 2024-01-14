@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    druid:
+      driver-class-name: ${eems.datasource.driver-class-name}
+      url: jdbc:mysql://${eems.datasource.host}:${eems.datasource.port}/${eems.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${eems.datasource.username}
+      password: ${eems.datasource.password}
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.zzmr.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
