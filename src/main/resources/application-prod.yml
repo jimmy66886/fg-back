@@ -8,6 +8,6 @@ spring:
   redis:
     host: 1.14.102.11
     port: 6379
-    database: 0
+    database: 5
     timeout: 1800000
     password: '010203'

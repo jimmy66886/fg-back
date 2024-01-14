@@ -1,4 +1,4 @@
-package com.zzmr.eemsback.result;
+package com.zzmr.fgback.result;
 
 import lombok.Data;
 

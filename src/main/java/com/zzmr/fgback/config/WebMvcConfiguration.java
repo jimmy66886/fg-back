@@ -1,4 +1,4 @@
-package com.zzmr.eemsback.config;
+package com.zzmr.fgback.config;
 
 /**
  * @author zzmr
@@ -6,7 +6,7 @@ package com.zzmr.eemsback.config;
  */
 
 
-import com.zzmr.eemsback.json.JacksonObjectMapper;
+import com.zzmr.fgback.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,14 +57,14 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Bean
     public Docket docket() {
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("系统文档")
+                .title("接口文档")
                 .version("2.0")
-                .description("系统文档")
+                .description("美食教程小程序接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.zzmr.eemsback.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.zzmr.fgback.controller"))
                 .paths(PathSelectors.any())
                 .build();
         return docket;
