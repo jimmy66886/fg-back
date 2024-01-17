@@ -25,11 +25,11 @@ import org.springframework.stereotype.Component;
 public class Favorite implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    private Integer userId;
+    private Long userId;
 
-    private Integer recipeId;
+    private Long recipeId;
 
     private LocalDateTime createTime;
 

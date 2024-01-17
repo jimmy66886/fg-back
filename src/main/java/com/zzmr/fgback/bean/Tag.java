@@ -24,9 +24,9 @@ import org.springframework.stereotype.Component;
 public class Tag implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    private Integer recipeId;
+    private Long recipeId;
 
     private String name;
 

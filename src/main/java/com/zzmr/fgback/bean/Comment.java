@@ -25,15 +25,17 @@ import org.springframework.stereotype.Component;
 public class Comment implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    private Integer recipeId;
+    private Long recipeId;
 
     private String content;
 
-    private Integer userId;
+    private Long userId;
 
-    private Integer parentId;
+    private Long rootId;
+
+    private Long toId;
 
     private LocalDateTime createTime;
 

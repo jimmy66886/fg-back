@@ -25,13 +25,13 @@ import org.springframework.stereotype.Component;
 public class Recipe implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     private String title;
 
     private String content;
 
-    private Integer authorId;
+    private Long authorId;
 
     private String imageUrl;
 
