@@ -13,8 +13,6 @@ public class CommentDTO {
 
     private Long rootId;
 
-    private Long toId;
-
     private Integer page;
 
     private Integer pageSize;

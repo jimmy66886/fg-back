@@ -11,3 +11,8 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 查看日志
     #开启驼峰命名
     map-underscore-to-camel-case: true
+
+# 将sql打印到控制台上
+logging:
+  level:
+    com.zzmr.fgback.mapper: debug
