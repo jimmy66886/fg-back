@@ -23,7 +23,7 @@ public class CodeGet {
         // 2、全局配置
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("D:\\Codefield\\Course_Design\\fg-back\\src\\main\\java");
+        gc.setOutputDir("D:\\study\\GraduationDesign\\code\\fg-back\\src\\main\\java");
 
         gc.setServiceName("%sService");	//去掉Service接口的首字母I
         gc.setAuthor("zzmr");
@@ -52,14 +52,14 @@ public class CodeGet {
         StrategyConfig strategy = new StrategyConfig();
 
         // 指定表名
-        strategy.setInclude("category");
-        strategy.setInclude("comment");
-        strategy.setInclude("favorite");
-        strategy.setInclude("likes");
-        strategy.setInclude("recipe");
-        strategy.setInclude("tag");
-        strategy.setInclude("user");
-
+        // strategy.setInclude("category");
+        // strategy.setInclude("comment");
+        // strategy.setInclude("favorite");
+        // strategy.setInclude("likes");
+        // strategy.setInclude("recipe");
+        // strategy.setInclude("tag");
+        // strategy.setInclude("user");
+        strategy.setInclude("materials");
 
 
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
