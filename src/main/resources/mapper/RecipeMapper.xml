@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzmr.fgback.mapper.RecipeMapper">
 
-    <!-- 查询RecipeVO，包括基本信息、用料、步骤、点赞数、收藏数 -->
-    <resultMap id="RecipeVOResultMap" type="com.zzmr.fgback.vo.RecipeVO">
+    <!-- 查询RecipeVo，包括基本信息、用料、步骤、点赞数、收藏数 -->
+    <resultMap id="RecipeVoResultMap" type="com.zzmr.fgback.vo.RecipeVo">
         <!-- 基本属性映射 -->
         <result property="recipeId" column="recipe_id"/>
         <result property="title" column="title"/>
@@ -18,7 +18,7 @@
         <result property="favoriteNumber" column="favorite_number"/>
 
         <!-- 用料列表映射 -->
-        <collection property="materials" ofType="com.zzmr.fgback.bean.Materials">
+        <collection property="materialsList" ofType="com.zzmr.fgback.bean.Materials">
             <id column="materials_id" property="materialsId"/>
             <result property="recipeId" column="recipe_id"/>
             <result property="name" column="name"/>
@@ -26,7 +26,7 @@
         </collection>
 
         <!-- 菜谱步骤列表映射 -->
-        <collection property="recipeSteps" ofType="com.zzmr.fgback.bean.RecipeStep">
+        <collection property="recipeStepList" ofType="com.zzmr.fgback.bean.RecipeStep">
             <id column="recipe_step_id" property="recipeStepId"/>
             <result property="stepNumber" column="step_number"/>
             <result property="recipeId" column="recipe_id"/>
@@ -35,35 +35,73 @@
         </collection>
 
     </resultMap>
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="recipeId">
+        insert into recipe(title, intro, author_id, image_url, views)
+        values (#{title}, #{intro}, #{authorId}, #{imageUrl}, #{views})
+    </insert>
 
-    <!-- 查询RecipeVO，包括基本信息、用料、步骤、点赞数、收藏数 -->
-    <select id="getRecipeVO" resultMap="RecipeVOResultMap">
-        SELECT
-            r.recipe_id,
-            r.title,
-            r.intro,
-            r.author_id,
-            r.image_url,
-            r.create_time,
-            r.update_time,
-            r.views,
-            (
-                SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe'
-            ) AS like_number,
-            (
-                SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id
-            ) AS favorite_number,
-            m.materials_id,
-            m.name,
-            m.amount,
-            rs.recipe_step_id,
-            rs.step_number,
-            rs.img,
-            rs.content
+    <!-- 查询RecipeVo，包括基本信息、用料、步骤、点赞数、收藏数 -->
+    <select id="getRecipeVo" resultMap="RecipeVoResultMap">
+        SELECT r.recipe_id,
+               r.title,
+               r.intro,
+               r.author_id,
+               r.image_url,
+               r.create_time,
+               r.update_time,
+               r.views,
+               (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe') AS like_number,
+               (SELECT COUNT(*)
+                FROM favorite
+                WHERE recipe_id = r.recipe_id)                                                         AS favorite_number,
+               m.materials_id,
+               m.name,
+               m.amount,
+               rs.recipe_step_id,
+               rs.step_number,
+               rs.img,
+               rs.content
         FROM recipe r
                  LEFT JOIN materials m ON r.recipe_id = m.recipe_id
                  LEFT JOIN recipe_step rs ON r.recipe_id = rs.recipe_id
         WHERE r.recipe_id = #{recipeId}
+    </select>
+
+    <!--  根据用料名称集合查询Recipe  -->
+    <select id="getByMaterials" resultType="com.zzmr.fgback.bean.Recipe">
+        SELECT
+        recipe_id,
+        author_id,
+        create_time,
+        image_url,
+        intro,
+        update_time,
+        title,
+        views
+        FROM recipe
+        WHERE recipe_id IN
+        (SELECT DISTINCT m.recipe_id FROM materials m WHERE m.`name` IN
+        <foreach collection="materialsNameList" item="materialsName" open="(" separator="," close=")">
+            #{materialsName}
+        </foreach>
+        )
+    </select>
+
+    <select id="getRecipeList" resultType="com.zzmr.fgback.bean.Recipe">
+        select recipe_id,
+        title,
+        intro,
+        author_id,
+        image_url,
+        create_time,
+        update_time,
+        views
+        from recipe
+        <where>
+            <if test="title!=null and title!=''">
+                title like CONCAT('%', #{title},'%')
+            </if>
+        </where>
     </select>
 
 </mapper>

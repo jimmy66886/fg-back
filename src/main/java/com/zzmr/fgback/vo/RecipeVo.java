@@ -12,13 +12,13 @@ import java.util.List;
  * @create 2024-01-23 21:27
  */
 @Data
-public class RecipeVO extends Recipe {
+public class RecipeVo extends Recipe {
 
-    // VO中多了一个用料集合
-    private List<Materials> materials;
+    // Vo中多了一个用料集合
+    private List<Materials> materialsList;
 
     // 还有一个步骤集合
-    private List<RecipeStep> recipeSteps;
+    private List<RecipeStep> recipeStepList;
 
     // 点赞数
     private Integer likeNumber;

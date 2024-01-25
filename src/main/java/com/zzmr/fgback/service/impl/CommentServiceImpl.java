@@ -5,13 +5,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zzmr.fgback.bean.Comment;
 import com.zzmr.fgback.bean.User;
-import com.zzmr.fgback.dto.CommentDTO;
+import com.zzmr.fgback.dto.CommentDto;
 import com.zzmr.fgback.mapper.CommentMapper;
 import com.zzmr.fgback.mapper.UserMapper;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zzmr.fgback.vo.CommentVO;
+import com.zzmr.fgback.vo.CommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,45 +36,45 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private UserMapper userMapper;
 
     @Override
-    public PageResult getByRecipeId(CommentDTO commentDTO) {
+    public PageResult getByRecipeId(CommentDto commentDto) {
         // 开启分页
-        PageHelper.startPage(commentDTO.getPage(), commentDTO.getPageSize());
+        PageHelper.startPage(commentDto.getPage(), commentDto.getPageSize());
 
         // 查询顶级评论条件组合
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Comment::getRecipeId, commentDTO.getRecipeId())
+        lambdaQueryWrapper.eq(Comment::getRecipeId, commentDto.getRecipeId())
                 .isNull(Comment::getRootId).isNull(Comment::getToId);
         Page<Comment> comments = (Page<Comment>) commentMapper.selectList(lambdaQueryWrapper);
 
-        List<CommentVO> commentVOS = new ArrayList<>();
+        List<CommentVo> commentVos = new ArrayList<>();
         for (Comment comment : comments) {
             User sender = userMapper.selectById(comment.getUserId());
-            CommentVO commentVO = CommentVO.builder().senderId(sender.getUserId()).senderName(sender.getNickName())
+            CommentVo commentVo = CommentVo.builder().senderId(sender.getUserId()).senderName(sender.getNickName())
                     .senderAvatarUrl(sender.getAvatarUrl()).content(comment.getContent()).sendDateTime(comment.getCreateTime())
                     .CommentId(comment.getCommentId())
                     .build();
-            commentVOS.add(commentVO);
+            commentVos.add(commentVo);
         }
-        return new PageResult(comments.getTotal(), commentVOS);
+        return new PageResult(comments.getTotal(), commentVos);
     }
 
     @Override
-    public PageResult getByTopComment(CommentDTO commentDTO) {
+    public PageResult getByTopComment(CommentDto commentDto) {
         /**
          * 肯定是有菜谱id recipeId
          * 也会有rootId，该值应该和顶级评论id相等
          * 如果是二级评论的评论，toId也不为空
          */
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Comment::getRecipeId, commentDTO.getRecipeId())
-                .eq(Comment::getRootId, commentDTO.getRootId());
+        lambdaQueryWrapper.eq(Comment::getRecipeId, commentDto.getRecipeId())
+                .eq(Comment::getRootId, commentDto.getRootId());
         // 根据recipeId和rootId就可以查出该顶级评论下的二级评论了（包括回复顶级评论和不回复顶级评论的）
 
-        // 返回结果VO
-        List<CommentVO> commentVOS = new ArrayList<>();
+        // 返回结果Vo
+        List<CommentVo> commentVos = new ArrayList<>();
 
         // 加入分页
-        PageHelper.startPage(commentDTO.getPage(), commentDTO.getPageSize());
+        PageHelper.startPage(commentDto.getPage(), commentDto.getPageSize());
         Page<Comment> commentPage = (Page<Comment>) commentMapper.selectList(lambdaQueryWrapper);
         List<Comment> comments = commentPage.getResult();
         for (Comment comment : comments) {
@@ -90,23 +90,23 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 // 第一个是 发送者，第二个是接收者
                 User sender = userMapper.selectById(senderId);
                 User receiver = userMapper.selectById(receiveId);
-                CommentVO commentVO =
-                        CommentVO.builder().senderName(sender.getNickName()).senderId(senderId).senderAvatarUrl(sender.getAvatarUrl())
+                CommentVo commentVo =
+                        CommentVo.builder().senderName(sender.getNickName()).senderId(senderId).senderAvatarUrl(sender.getAvatarUrl())
                                 .receiveName(receiver.getNickName()).receiverId(receiveId).receiverAvatarUrl(receiver.getAvatarUrl())
                                 .content(comment.getContent()).sendDateTime(comment.getCreateTime()).CommentId(comment.getCommentId())
                                 .build();
-                commentVOS.add(commentVO);
+                commentVos.add(commentVo);
             } else {
                 // 顶级评论
                 User sender = userMapper.selectById(comment.getUserId());
-                CommentVO commentVO =
-                        CommentVO.builder().senderName(sender.getNickName()).senderId(comment.getCommentId()).senderAvatarUrl(sender.getAvatarUrl())
+                CommentVo commentVo =
+                        CommentVo.builder().senderName(sender.getNickName()).senderId(comment.getCommentId()).senderAvatarUrl(sender.getAvatarUrl())
                                 .content(comment.getContent()).sendDateTime(comment.getCreateTime()).CommentId(comment.getCommentId())
                                 .build();
-                commentVOS.add(commentVO);
+                commentVos.add(commentVo);
             }
         }
 
-        return new PageResult(commentPage.getTotal(), commentVOS);
+        return new PageResult(commentPage.getTotal(), commentVos);
     }
 }

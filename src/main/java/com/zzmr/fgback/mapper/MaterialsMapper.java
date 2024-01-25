@@ -3,6 +3,9 @@ package com.zzmr.fgback.mapper;
 import com.zzmr.fgback.bean.Materials;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +18,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MaterialsMapper extends BaseMapper<Materials> {
 
+    /**
+     * 批量插入用料
+     * @param materialsList
+     */
+    void insertBatch(@Param("materialsList") List<Materials> materialsList);
 }

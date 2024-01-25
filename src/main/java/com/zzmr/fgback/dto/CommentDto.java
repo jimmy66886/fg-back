@@ -7,7 +7,7 @@ import lombok.Data;
  * @create 2024-01-17 9:15
  */
 @Data
-public class CommentDTO {
+public class CommentDto {
 
     private Long recipeId;
 

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Builder
-public class CommentVO {
+public class CommentVo {
 
     private Long CommentId;
 
