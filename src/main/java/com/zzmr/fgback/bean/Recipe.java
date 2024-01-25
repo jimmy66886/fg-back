@@ -24,12 +24,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class Recipe implements Serializable {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "recipe_id", type = IdType.AUTO)
+    private Long recipeId;
 
     private String title;
 
-    private String content;
+    private String intro;
 
     private Long authorId;
 

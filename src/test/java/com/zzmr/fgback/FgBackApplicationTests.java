@@ -1,6 +1,8 @@
 package com.zzmr.fgback;
 
+import com.zzmr.fgback.bean.Recipe;
 import com.zzmr.fgback.bean.User;
+import com.zzmr.fgback.mapper.RecipeMapper;
 import com.zzmr.fgback.mapper.UserMapper;
 import com.zzmr.fgback.service.UserService;
 import lombok.Data;
@@ -17,6 +19,9 @@ class FgBackApplicationTests {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private RecipeMapper recipeMapper;
 
     @Autowired
     private UserService userService;
@@ -59,4 +64,5 @@ class Test2 {
     // private String id = 10L;
     private String id = "10";
 }
+
 

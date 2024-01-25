@@ -24,8 +24,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Favorite implements Serializable {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "favorite_id", type = IdType.AUTO)
+    private Long favoriteId;
 
     private Long userId;
 

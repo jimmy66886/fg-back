@@ -49,9 +49,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<CommentVO> commentVOS = new ArrayList<>();
         for (Comment comment : comments) {
             User sender = userMapper.selectById(comment.getUserId());
-            CommentVO commentVO = CommentVO.builder().senderId(sender.getId()).senderName(sender.getNickName())
+            CommentVO commentVO = CommentVO.builder().senderId(sender.getUserId()).senderName(sender.getNickName())
                     .senderAvatarUrl(sender.getAvatarUrl()).content(comment.getContent()).sendDateTime(comment.getCreateTime())
-                    .CommentId(comment.getId())
+                    .CommentId(comment.getCommentId())
                     .build();
             commentVOS.add(commentVO);
         }
@@ -93,15 +93,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 CommentVO commentVO =
                         CommentVO.builder().senderName(sender.getNickName()).senderId(senderId).senderAvatarUrl(sender.getAvatarUrl())
                                 .receiveName(receiver.getNickName()).receiverId(receiveId).receiverAvatarUrl(receiver.getAvatarUrl())
-                                .content(comment.getContent()).sendDateTime(comment.getCreateTime()).CommentId(comment.getId())
+                                .content(comment.getContent()).sendDateTime(comment.getCreateTime()).CommentId(comment.getCommentId())
                                 .build();
                 commentVOS.add(commentVO);
             } else {
                 // 顶级评论
                 User sender = userMapper.selectById(comment.getUserId());
                 CommentVO commentVO =
-                        CommentVO.builder().senderName(sender.getNickName()).senderId(comment.getId()).senderAvatarUrl(sender.getAvatarUrl())
-                                .content(comment.getContent()).sendDateTime(comment.getCreateTime()).CommentId(comment.getId())
+                        CommentVO.builder().senderName(sender.getNickName()).senderId(comment.getCommentId()).senderAvatarUrl(sender.getAvatarUrl())
+                                .content(comment.getContent()).sendDateTime(comment.getCreateTime()).CommentId(comment.getCommentId())
                                 .build();
                 commentVOS.add(commentVO);
             }

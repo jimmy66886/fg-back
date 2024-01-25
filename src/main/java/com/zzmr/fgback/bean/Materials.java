@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+import org.springframework.stereotype.Component;
 
 /**
  * <p>
@@ -17,11 +16,14 @@ import lombok.EqualsAndHashCode;
  * @since 2024-01-23
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
+@Component
 public class Materials implements Serializable {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "materials_id", type = IdType.AUTO)
+    private Long materialsId;
 
     private Long recipeId;
 

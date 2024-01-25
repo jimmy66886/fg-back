@@ -24,8 +24,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Likes implements Serializable {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "likes_id", type = IdType.AUTO)
+    private Long likesId;
 
     /**
      * 点赞内容类型 直接用recipe/comment

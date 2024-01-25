@@ -27,8 +27,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class User implements Serializable {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "user_id", type = IdType.AUTO)
+    private Long userId;
 
     private String nickName;
 

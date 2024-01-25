@@ -23,8 +23,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Category implements Serializable {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "category_id", type = IdType.AUTO)
+    private Long categoryId;
 
     private Long recipeId;
 

@@ -45,7 +45,7 @@ public class CodeGet {
         pc.setModuleName("fgback"); //模块名
         pc.setController("controller");
         pc.setService("service");
-        pc.setMapper("com/zzmr/fgback/mapper/xml");
+        pc.setMapper("mapper");
         mpg.setPackageInfo(pc);
 
         // 5、策略配置
@@ -59,7 +59,7 @@ public class CodeGet {
         // strategy.setInclude("recipe");
         // strategy.setInclude("tag");
         // strategy.setInclude("user");
-        strategy.setInclude("materials");
+        strategy.setInclude("favorites","recipe_step");
 
 
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
