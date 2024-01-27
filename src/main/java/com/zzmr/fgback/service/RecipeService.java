@@ -6,6 +6,7 @@ import com.zzmr.fgback.dto.AddRecipeDto;
 import com.zzmr.fgback.dto.MaterialsDto;
 import com.zzmr.fgback.dto.RecipeDto;
 import com.zzmr.fgback.result.PageResult;
+import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeVo;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public interface RecipeService extends IService<Recipe> {
      * @param materialsDtoList
      * @return
      */
-    List<Recipe> getByMaterials(List<MaterialsDto> materialsDtoList);
+    List<RecipeBasicVo> getByMaterials(List<MaterialsDto> materialsDtoList);
 
     /**
      * 分页查询菜谱列表

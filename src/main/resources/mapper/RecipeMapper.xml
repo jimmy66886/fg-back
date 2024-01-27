@@ -16,6 +16,7 @@
         <!-- 点赞数和收藏数 -->
         <result property="likeNumber" column="like_number"/>
         <result property="favoriteNumber" column="favorite_number"/>
+        <result property="nickName" column="nick_name"/>
 
         <!-- 用料列表映射 -->
         <collection property="materialsList" ofType="com.zzmr.fgback.bean.Materials">
@@ -60,25 +61,34 @@
                rs.recipe_step_id,
                rs.step_number,
                rs.img,
-               rs.content
+               rs.content,
+               u.nick_name
         FROM recipe r
                  LEFT JOIN materials m ON r.recipe_id = m.recipe_id
                  LEFT JOIN recipe_step rs ON r.recipe_id = rs.recipe_id
+                 left join user u on r.author_id = u.user_id
         WHERE r.recipe_id = #{recipeId}
     </select>
 
-    <!--  根据用料名称集合查询Recipe  -->
-    <select id="getByMaterials" resultType="com.zzmr.fgback.bean.Recipe">
+    <!--  根据用料名称集合查询RecipeBasicVo  -->
+    <select id="getByMaterials" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
         SELECT
-        recipe_id,
-        author_id,
-        create_time,
-        image_url,
-        intro,
-        update_time,
-        title,
-        views
-        FROM recipe
+        r.recipe_id,
+        r.author_id,
+        r.create_time,
+        r.image_url,
+        r.intro,
+        r.title,
+        r.views,
+        r.update_time,
+        `user`.nick_name,
+        (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe')
+        AS like_number,
+        (SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id)
+        AS favorite_number
+        FROM
+        recipe r
+        LEFT JOIN `user` ON r.author_id = `user`.user_id
         WHERE recipe_id IN
         (SELECT DISTINCT m.recipe_id FROM materials m WHERE m.`name` IN
         <foreach collection="materialsNameList" item="materialsName" open="(" separator="," close=")">
@@ -87,16 +97,22 @@
         )
     </select>
 
-    <select id="getRecipeList" resultType="com.zzmr.fgback.bean.Recipe">
-        select recipe_id,
-        title,
-        intro,
-        author_id,
-        image_url,
-        create_time,
-        update_time,
-        views
-        from recipe
+    <select id="getRecipeList" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
+        select r.recipe_id,
+        r.title,
+        r.intro,
+        r.author_id,
+        r.image_url,
+        r.create_time,
+        r.update_time,
+        r.views,
+        u.nick_name,
+        (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe')
+        AS like_number,
+        (SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id)
+        AS favorite_number
+        from recipe r
+        left join user u on r.author_id = u.user_id
         <where>
             <if test="title!=null and title!=''">
                 title like CONCAT('%', #{title},'%')

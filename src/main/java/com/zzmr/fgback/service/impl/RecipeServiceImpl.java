@@ -11,6 +11,7 @@ import com.zzmr.fgback.mapper.*;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.RecipeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,14 +73,14 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
      * @return
      */
     @Override
-    public List<Recipe> getByMaterials(List<MaterialsDto> materialsDtoList) {
+    public List<RecipeBasicVo> getByMaterials(List<MaterialsDto> materialsDtoList) {
 
         List<String> materialsNameList = new ArrayList<>();
         for (MaterialsDto materialsDTO : materialsDtoList) {
             materialsNameList.add(materialsDTO.getMaterialName());
         }
-        List<Recipe> recipes = recipeMapper.getByMaterials(materialsNameList);
-        return recipes;
+        List<RecipeBasicVo> recipeBasicVos = recipeMapper.getByMaterials(materialsNameList);
+        return recipeBasicVos;
     }
 
     /**
@@ -91,7 +92,7 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
     @Override
     public PageResult getRecipeList(RecipeDto recipeDto) {
         PageHelper.startPage(recipeDto.getPage(), recipeDto.getPageSize());
-        Page<Recipe> page = recipeMapper.getRecipeList(recipeDto.getTitle());
+        Page<RecipeBasicVo> page = recipeMapper.getRecipeList(recipeDto.getTitle());
         return new PageResult(page.getTotal(), page.getResult());
     }
 

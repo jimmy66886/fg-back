@@ -2,6 +2,7 @@ package com.zzmr.fgback.service;
 
 import com.zzmr.fgback.bean.Likes;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzmr.fgback.dto.AddLikeDto;
 
 /**
  * <p>
@@ -13,4 +14,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface LikesService extends IService<Likes> {
 
+    /**
+     * 新增点赞
+     * @param addLikeDto
+     */
+    void addLikes(AddLikeDto addLikeDto);
 }

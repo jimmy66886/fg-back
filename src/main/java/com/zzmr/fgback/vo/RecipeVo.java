@@ -26,4 +26,7 @@ public class RecipeVo extends Recipe {
     // 收藏数
     private Integer favoriteNumber;
 
+    // 昵称
+    private String nickName;
+
 }

@@ -3,6 +3,7 @@ package com.zzmr.fgback.mapper;
 import com.github.pagehelper.Page;
 import com.zzmr.fgback.bean.Recipe;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -32,7 +33,7 @@ public interface RecipeMapper extends BaseMapper<Recipe> {
      * @param materialsNameList
      * @return
      */
-    List<Recipe> getByMaterials(@Param("materialsNameList") List<String> materialsNameList);
+    List<RecipeBasicVo> getByMaterials(@Param("materialsNameList") List<String> materialsNameList);
 
 
     /**
@@ -40,7 +41,7 @@ public interface RecipeMapper extends BaseMapper<Recipe> {
      * @param title
      * @return
      */
-    Page<Recipe> getRecipeList(@Param("title") String title);
+    Page<RecipeBasicVo> getRecipeList(@Param("title") String title);
 
     /**
      * 插入一条，并返回主键

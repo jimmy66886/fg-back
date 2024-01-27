@@ -8,10 +8,12 @@ import com.zzmr.fgback.dto.RecipeDto;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.RecipeService;
+import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,18 +35,22 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @ApiOperation("根据菜谱id查询菜谱以及菜谱对应用料")
     @GetMapping("/getByRecipeId")
     public Result getByRecipeId(@RequestParam("recipeId") Long recipeId) {
         RecipeVo recipeVo = recipeService.getByRecipeId(recipeId);
+        // redisTemplate.opsForValue().set("recipe_id:" + recipeId + "-views:", recipeVo.getViews());
         return Result.success(recipeVo);
     }
 
     @ApiOperation("根据用料名称查询菜谱")
     @PostMapping("/getByMaterials")
     public Result getByMaterials(@RequestBody List<MaterialsDto> materialsDtoList) {
-        List<Recipe> recipes = recipeService.getByMaterials(materialsDtoList);
-        return Result.success(recipes);
+        List<RecipeBasicVo> recipeBasicVos = recipeService.getByMaterials(materialsDtoList);
+        return Result.success(recipeBasicVos);
     }
 
     @ApiOperation("分页查询菜谱列表")
@@ -56,6 +62,7 @@ public class RecipeController {
 
     /**
      * 涉及到菜谱步骤和用料的删除
+     *
      * @param recipeDto
      * @return
      */
@@ -68,6 +75,7 @@ public class RecipeController {
 
     /**
      * 涉及到菜谱步骤和用料的删除
+     *
      * @param recipeIds
      * @return
      */
@@ -80,24 +88,26 @@ public class RecipeController {
 
     /**
      * 涉及到菜谱步骤和用料的新增
+     *
      * @param addRecipeDto
      * @return
      */
     @ApiOperation("新增菜谱")
     @PostMapping("/addRecipe")
-    public Result addRecipe(@RequestBody AddRecipeDto addRecipeDto){
+    public Result addRecipe(@RequestBody AddRecipeDto addRecipeDto) {
         recipeService.addRecipe(addRecipeDto);
         return Result.success();
     }
 
     /**
      * 涉及到菜谱的步骤和用料的修改
+     *
      * @param addRecipeDto
      * @return
      */
     @ApiOperation("修改菜谱")
     @PostMapping("/updateRecipe")
-    public Result updateRecipe(@RequestBody AddRecipeDto addRecipeDto){
+    public Result updateRecipe(@RequestBody AddRecipeDto addRecipeDto) {
         recipeService.updateOne(addRecipeDto);
         return Result.success();
     }
