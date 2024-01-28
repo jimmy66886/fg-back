@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 
 import java.io.Serializable;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +24,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class Category implements Serializable {
 
+    @ApiModelProperty(value = "分类id")
     @TableId(value = "category_id", type = IdType.AUTO)
     private Long categoryId;
 
+    @ApiModelProperty(value = "菜谱id")
     private Long recipeId;
 
+    @ApiModelProperty(value = "分类名")
     private String name;
 
 

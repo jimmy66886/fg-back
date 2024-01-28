@@ -3,6 +3,7 @@ package com.zzmr.fgback.dto;
 import com.zzmr.fgback.bean.Materials;
 import com.zzmr.fgback.bean.Recipe;
 import com.zzmr.fgback.bean.RecipeStep;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -15,8 +16,10 @@ import java.util.List;
 @Data
 public class AddRecipeDto extends Recipe {
 
+    @ApiModelProperty(value = "菜谱步骤集合")
     private List<RecipeStep> recipeStepList;
 
+    @ApiModelProperty(value = "菜谱用料集合")
     private List<Materials> materialsList;
 
 }

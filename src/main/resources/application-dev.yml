@@ -11,3 +11,11 @@ spring:
     database: 0
     timeout: 1800000
     password: '010203'
+  servlet:
+    multipart:
+      max-file-size: 10MB
+minio:
+  endpoint: http://47.109.139.173:9000
+  access-key: paJorTMGQnUHTlZ5PWJ1
+  secre-key: gwDjy61ZhVEQI7z2IOLu9q2dIAaw4ujifoUrCNSM
+  bucketName: food.guide

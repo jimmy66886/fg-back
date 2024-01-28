@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
@@ -22,27 +23,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class RecipeStep implements Serializable {
 
+    @ApiModelProperty(value = "菜谱步骤id")
     @TableId(value = "recipe_step_id", type = IdType.AUTO)
     private Long recipeStepId;
 
-    /**
-     * 步骤数，从1开始，1，2，3，4,....
-     */
+    @ApiModelProperty(value = "步骤数，从1开始，1，2，3，4,....")
     private Integer stepNumber;
 
-    /**
-     * 菜谱id
-     */
+    @ApiModelProperty(value = "菜谱id")
     private Long recipeId;
 
-    /**
-     * 步骤图片
-     */
+    @ApiModelProperty(value = "步骤图片")
     private String img;
 
-    /**
-     * 步骤描述
-     */
+    @ApiModelProperty(value = "步骤描述")
     private String content;
 
 

@@ -42,7 +42,8 @@ class FgBackApplicationTests {
         recipe.setTitle("测试redis");
         redisUtils.setBean("o1", recipe);
         System.out.println(redisUtils.getStr("k1"));
-        System.out.println(redisUtils.getJsonToBean("o1", Recipe.class));
+        Recipe recipe1 = redisUtils.getJsonToBean("o1", Recipe.class);
+        System.out.println(recipe1.getTitle());
     }
 
     @Test
@@ -55,7 +56,7 @@ class FgBackApplicationTests {
     }
 
     @Test
-    void testRedisUtilsList(){
+    void testRedisUtilsList() {
         List<String> stringList = Arrays.asList("4", "2", "3");
         redisUtils.setList("List1", stringList);
 
@@ -65,13 +66,7 @@ class FgBackApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(redisTemplate);
-        System.out.println(userService);
-        System.out.println(userMapper);
-        User user = userMapper.getUserByAccount("17513571210");
-        System.out.println(user);
-
-        // redisTemplate.opsForValue().set("testKey", 1);
+        redisTemplate.opsForValue().set("testKey", 1);
         System.out.println(redisTemplate.opsForValue().get("testKey"));
     }
 
@@ -84,6 +79,13 @@ class FgBackApplicationTests {
          */
         BeanUtils.copyProperties(t2, t1);
         System.out.println(t1);
+    }
+
+    @Test
+    public void testStr() {
+        String fileName = "test.jpg";
+        System.out.println(fileName.lastIndexOf("."));
+        System.out.println(fileName.substring(4));
     }
 
 }

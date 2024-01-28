@@ -1,5 +1,6 @@
 package com.zzmr.fgback.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -9,18 +10,16 @@ import lombok.Data;
 @Data
 public class RecipeDto {
 
-    /**
-     * 标题模糊搜索
-     */
+    @ApiModelProperty(value = "标题模糊搜索")
     private String title;
 
-    /**
-     * 菜谱id
-     */
+    @ApiModelProperty(value = "菜谱id")
     private Long recipeId;
 
+    @ApiModelProperty(value = "页号")
     private Integer page;
 
+    @ApiModelProperty(value = "页面大小")
     private Integer pageSize;
 
 }

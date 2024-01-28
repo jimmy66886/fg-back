@@ -1,5 +1,6 @@
 package com.zzmr.fgback.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -9,10 +10,10 @@ import lombok.Data;
 @Data
 public class AddLikeDto {
 
-    // 菜谱id
+    @ApiModelProperty(value = "菜谱id")
     private Long recipeId;
 
-    // 评论id
+    @ApiModelProperty(value = "评论id")
     private Long commentId;
 
 }
