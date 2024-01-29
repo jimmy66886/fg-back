@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -103,9 +104,9 @@ public class RedisUtils {
     /**
      * 存储集合
      *
-     * @param key   键
-     * @param list  集合对象
-     * @param <T>   集合元素类型
+     * @param key  键
+     * @param list 集合对象
+     * @param <T>  集合元素类型
      */
     public <T> void setList(String key, List<T> list) {
         if (key != null && list != null) {
@@ -119,7 +120,7 @@ public class RedisUtils {
      * @param key      键
      * @param classOfT 集合元素类型
      * @param <T>      集合元素类型
-     * @return         集合对象
+     * @return 集合对象
      */
     public <T> List<T> getList(String key, Class<T> classOfT) {
         String jsonString = redisTemplate.opsForValue().get(key);
@@ -128,5 +129,15 @@ public class RedisUtils {
             return jsonArray.toList(classOfT);
         }
         return null;
+    }
+
+    /**
+     * 清除缓存
+     *
+     * @param pattern
+     */
+    public void cleanCache(String pattern) {
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
     }
 }

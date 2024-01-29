@@ -8,6 +8,7 @@ import com.zzmr.fgback.dto.RecipeDto;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.RecipeService;
+import com.zzmr.fgback.util.RedisUtils;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeVo;
 import io.swagger.annotations.Api;
@@ -36,13 +37,20 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisUtils redisUtils;
 
     @ApiOperation("根据菜谱id查询菜谱以及菜谱对应用料")
     @GetMapping("/getByRecipeId")
     public Result getByRecipeId(@RequestParam("recipeId") Long recipeId) {
-        RecipeVo recipeVo = recipeService.getByRecipeId(recipeId);
-        // redisTemplate.opsForValue().set("recipe_id:" + recipeId + "-views:", recipeVo.getViews());
+        // 先查缓存
+        RecipeVo recipeVo = redisUtils.getJsonToBean("recipe_" + recipeId, RecipeVo.class);
+        if (recipeVo != null) {
+            return Result.success(recipeVo);
+        }
+
+        // 缓存为空，则查数据库
+        recipeVo = recipeService.getByRecipeId(recipeId);
+        redisUtils.setBean("recipe_" + recipeId, recipeVo);
         return Result.success(recipeVo);
     }
 
@@ -70,6 +78,8 @@ public class RecipeController {
     @PostMapping("/removeById")
     public Result removeById(@RequestBody RecipeDto recipeDto) {
         recipeService.removeOne(recipeDto.getRecipeId());
+        // 清除缓存
+        redisUtils.cleanCache("recipe_" + recipeDto.getRecipeId());
         return Result.success();
     }
 
@@ -83,6 +93,10 @@ public class RecipeController {
     @PostMapping("/removeByIdList")
     public Result removeByIdList(@RequestBody List<Long> recipeIds) {
         recipeService.removeBatch(recipeIds);
+        // 清除缓存
+        for (Long recipeId : recipeIds) {
+            redisUtils.cleanCache("recipe_" + recipeId);
+        }
         return Result.success();
     }
 
@@ -109,6 +123,7 @@ public class RecipeController {
     @PostMapping("/updateRecipe")
     public Result updateRecipe(@RequestBody AddRecipeDto addRecipeDto) {
         recipeService.updateOne(addRecipeDto);
+        redisUtils.cleanCache("recipe_" + addRecipeDto.getRecipeId());
         return Result.success();
     }
 
