@@ -1,6 +1,7 @@
 package com.zzmr.fgback.config;
 
 import io.minio.MinioClient;
+import com.zzmr.fgback.properties.MinioProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

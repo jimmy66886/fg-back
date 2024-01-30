@@ -2,4 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzmr.fgback.mapper.CommentMapper">
 
+    <resultMap id="CommentVoResultMap" type="com.zzmr.fgback.vo.CommentVo">
+        <result column="comment_id" property="commentId"/>
+        <result column="sender_name" property="senderName"/>
+        <result column="sender_avatar_url" property="senderAvatarUrl"/>
+        <result column="user_id" property="senderId"/>
+        <result column="receiver_name" property="receiverName"/>
+        <result column="receiver_id" property="receiverId"/>
+        <result column="receiver_avatar_url" property="receiverAvatarUrl"/>
+        <result column="content" property="content"/>
+        <result column="create_time" property="sendDateTime"/>
+    </resultMap>
+
+    <select id="getTop" resultMap="CommentVoResultMap">
+        SELECT c.*,
+               (SELECT u.nick_name FROM `user` u WHERE u.user_id = c.user_id)  AS sender_name,
+               (SELECT u.avatar_url FROM `user` u WHERE u.user_id = c.user_id) AS sender_avatar_url
+        FROM `comment` c
+        WHERE c.recipe_id = #{commentDto.recipeId}
+          AND c.root_id IS NULL
+    </select>
+
+    <select id="getByTopComment" resultMap="CommentVoResultMap">
+        SELECT c.*,
+               s.nick_name  AS sender_name,
+               s.avatar_url AS sender_avatar_url,
+               s.user_id    AS sender_id,
+               r.nick_name  AS receiver_name,
+               r.avatar_url AS receiver_avatar_url,
+               r.user_id    AS receiver_id
+        FROM comment c
+                 LEFT JOIN user s ON c.user_id = s.user_id
+                 LEFT JOIN user r ON c.to_id = r.user_id
+        WHERE c.recipe_id = #{commentDto.recipeId}
+          AND c.root_id = #{commentDto.rootId}
+    </select>
 </mapper>

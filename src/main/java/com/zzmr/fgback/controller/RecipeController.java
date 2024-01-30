@@ -40,7 +40,7 @@ public class RecipeController {
     private RedisUtils redisUtils;
 
     @ApiOperation("根据菜谱id查询菜谱以及菜谱对应用料")
-    @GetMapping("/getByRecipeId")
+    @GetMapping("/getById")
     public Result getByRecipeId(@RequestParam("recipeId") Long recipeId) {
         // 先查缓存
         RecipeVo recipeVo = redisUtils.getJsonToBean("recipe_" + recipeId, RecipeVo.class);
@@ -62,7 +62,7 @@ public class RecipeController {
     }
 
     @ApiOperation("分页查询菜谱列表")
-    @PostMapping("/getRecipeList")
+    @PostMapping("/getList")
     public PageResult getRecipeList(@RequestBody RecipeDto recipeDto) {
         PageResult pageResult = recipeService.getRecipeList(recipeDto);
         return pageResult;
@@ -94,9 +94,7 @@ public class RecipeController {
     public Result removeByIdList(@RequestBody List<Long> recipeIds) {
         recipeService.removeBatch(recipeIds);
         // 清除缓存
-        for (Long recipeId : recipeIds) {
-            redisUtils.cleanCache("recipe_" + recipeId);
-        }
+        redisUtils.cleanCache("recipe_*");
         return Result.success();
     }
 
@@ -107,7 +105,7 @@ public class RecipeController {
      * @return
      */
     @ApiOperation("新增菜谱")
-    @PostMapping("/addRecipe")
+    @PostMapping("/add")
     public Result addRecipe(@RequestBody AddRecipeDto addRecipeDto) {
         recipeService.addRecipe(addRecipeDto);
         return Result.success();
@@ -120,7 +118,7 @@ public class RecipeController {
      * @return
      */
     @ApiOperation("修改菜谱")
-    @PostMapping("/updateRecipe")
+    @PostMapping("/update")
     public Result updateRecipe(@RequestBody AddRecipeDto addRecipeDto) {
         recipeService.updateOne(addRecipeDto);
         redisUtils.cleanCache("recipe_" + addRecipeDto.getRecipeId());

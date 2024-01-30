@@ -19,4 +19,11 @@ public interface LikesService extends IService<Likes> {
      * @param addLikeDto
      */
     void addLikes(AddLikeDto addLikeDto);
+
+    /**
+     * 查询用户是否点赞过菜谱
+     * @param recipeId
+     * @return
+     */
+    Boolean getLiked(Long recipeId);
 }

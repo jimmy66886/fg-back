@@ -1,8 +1,10 @@
 package com.zzmr.fgback.controller;
 
 
+import com.zzmr.fgback.bean.Comment;
 import com.zzmr.fgback.dto.CommentDto;
 import com.zzmr.fgback.result.PageResult;
+import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +42,20 @@ public class CommentController {
     public PageResult getByTopComment(@RequestBody CommentDto commentDto) {
         PageResult pageResult = commentService.getByTopComment(commentDto);
         return pageResult;
+    }
+
+    @ApiOperation("新增评论")
+    @PostMapping("/add")
+    public Result add(@RequestBody Comment comment) {
+        commentService.add(comment);
+        return Result.success();
+    }
+
+    @ApiOperation("删除评论")
+    @PostMapping("/delete")
+    public Result delete(@RequestParam("commentId") Long commentId) {
+        commentService.delete(commentId);
+        return Result.success(commentId);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.zzmr.fgback.util;
 
-import com.zzmr.fgback.config.MinioProperties;
+import com.zzmr.fgback.properties.MinioProperties;
 import com.zzmr.fgback.exception.BaseException;
 import com.zzmr.fgback.result.Result;
 import io.minio.MinioClient;

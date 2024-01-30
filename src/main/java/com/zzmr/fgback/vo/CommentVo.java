@@ -1,7 +1,10 @@
 package com.zzmr.fgback.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -10,10 +13,13 @@ import java.time.LocalDateTime;
  * @create 2024-01-17 21:42
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
+@Component
 public class CommentVo {
 
-    private Long CommentId;
+    private Long commentId;
 
     // 发送者姓名
     private String senderName;
@@ -25,7 +31,7 @@ public class CommentVo {
     private Long senderId;
 
     // 接收者姓名
-    private String receiveName;
+    private String receiverName;
 
     // 接收者头像url
     private String receiverAvatarUrl;

@@ -150,6 +150,7 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
      * @param addRecipeDto
      */
     @Override
+    @Transactional
     public void updateOne(AddRecipeDto addRecipeDto) {
         Recipe recipe = new Recipe();
         BeanUtils.copyProperties(addRecipeDto, recipe);
@@ -170,7 +171,8 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
      * @param addRecipeDto
      * @param recipe
      */
-    private void insertOthers(AddRecipeDto addRecipeDto, Recipe recipe) {
+    @Transactional
+    public void insertOthers(AddRecipeDto addRecipeDto, Recipe recipe) {
         Long recipeId = recipe.getRecipeId();
         List<Materials> materialsList = addRecipeDto.getMaterialsList();
         List<RecipeStep> recipeStepList = addRecipeDto.getRecipeStepList();

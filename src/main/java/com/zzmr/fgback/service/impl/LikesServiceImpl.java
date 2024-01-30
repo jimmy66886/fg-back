@@ -1,5 +1,6 @@
 package com.zzmr.fgback.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zzmr.fgback.bean.Likes;
 import com.zzmr.fgback.constant.LikesConstant;
 import com.zzmr.fgback.dto.AddLikeDto;
@@ -43,5 +44,26 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
             likes.setContentId(addLikeDto.getRecipeId());
         }
         likesMapper.insert(likes);
+    }
+
+    /**
+     * 查询用户是否点赞过菜谱
+     *
+     * @param recipeId
+     * @return
+     */
+    @Override
+    public Boolean getLiked(Long recipeId) {
+        // TODO 从ThreadLocal中取出用户id
+        Integer value = likesMapper.selectCount(new LambdaQueryWrapper<Likes>()
+                .eq(Likes::getContentType, LikesConstant.RecipeType)
+                .eq(Likes::getContentId, recipeId)
+                .eq(Likes::getUserId, 1L)
+        );
+        if (value > 0) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
     }
 }

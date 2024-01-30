@@ -17,6 +17,7 @@ public interface CommentService extends IService<Comment> {
 
     /**
      * 根据菜谱id分页查询菜谱的顶级评论
+     *
      * @param commentDto 分页查询条件
      * @return 分页结果
      */
@@ -24,8 +25,23 @@ public interface CommentService extends IService<Comment> {
 
     /**
      * 根据顶级评论id分页查询顶级评论下的二级评论
+     *
      * @param commentDto 分页查询条件
      * @return 分页结果
      */
     PageResult getByTopComment(CommentDto commentDto);
+
+    /**
+     * 新增评论
+     *
+     * @param comment
+     */
+    void add(Comment comment);
+
+    /**
+     * 删除评论以及子评论
+     *
+     * @param commentId
+     */
+    void delete(Long commentId);
 }

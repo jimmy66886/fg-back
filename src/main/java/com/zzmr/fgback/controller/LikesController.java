@@ -8,15 +8,11 @@ import com.zzmr.fgback.service.LikesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author zzmr
@@ -32,9 +28,16 @@ public class LikesController {
 
     @ApiOperation("新增点赞")
     @PostMapping("/add")
-    public Result addLikes(@RequestBody AddLikeDto addLikeDto){
+    public Result addLikes(@RequestBody AddLikeDto addLikeDto) {
         likesService.addLikes(addLikeDto);
         return Result.success();
+    }
+
+    @ApiOperation("查询用户是否点赞过菜谱")
+    @GetMapping("/getLiked")
+    public Result getLiked(@RequestParam("recipeId") Long recipeId) {
+        Boolean isLiked = likesService.getLiked(recipeId);
+        return Result.success(isLiked);
     }
 }
 

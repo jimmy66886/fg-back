@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zzmr.fgback.bean.Comment;
-import com.zzmr.fgback.bean.User;
 import com.zzmr.fgback.dto.CommentDto;
 import com.zzmr.fgback.mapper.CommentMapper;
-import com.zzmr.fgback.mapper.UserMapper;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,8 +13,6 @@ import com.zzmr.fgback.vo.CommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -32,81 +28,57 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Autowired
     private CommentMapper commentMapper;
 
-    @Autowired
-    private UserMapper userMapper;
-
+    /**
+     * 根据菜谱id分页查询菜谱的顶级评论
+     *
+     * @param commentDto 分页查询条件
+     * @return
+     */
     @Override
     public PageResult getByRecipeId(CommentDto commentDto) {
         // 开启分页
         PageHelper.startPage(commentDto.getPage(), commentDto.getPageSize());
-
-        // 查询顶级评论条件组合
-        LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Comment::getRecipeId, commentDto.getRecipeId())
-                .isNull(Comment::getRootId).isNull(Comment::getToId);
-        Page<Comment> comments = (Page<Comment>) commentMapper.selectList(lambdaQueryWrapper);
-
-        List<CommentVo> commentVos = new ArrayList<>();
-        for (Comment comment : comments) {
-            User sender = userMapper.selectById(comment.getUserId());
-            CommentVo commentVo = CommentVo.builder().senderId(sender.getUserId()).senderName(sender.getNickName())
-                    .senderAvatarUrl(sender.getAvatarUrl()).content(comment.getContent()).sendDateTime(comment.getCreateTime())
-                    .CommentId(comment.getCommentId())
-                    .build();
-            commentVos.add(commentVo);
-        }
-        return new PageResult(comments.getTotal(), commentVos);
+        Page<CommentVo> page = commentMapper.getTop(commentDto);
+        return new PageResult(page.getTotal(), page.getResult());
     }
 
+    /**
+     * 根据顶级评论id分页查询顶级评论下的二级评论
+     *
+     * @param commentDto 分页查询条件
+     * @return 分页结果
+     */
     @Override
     public PageResult getByTopComment(CommentDto commentDto) {
-        /**
-         * 肯定是有菜谱id recipeId
-         * 也会有rootId，该值应该和顶级评论id相等
-         * 如果是二级评论的评论，toId也不为空
-         */
-        LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Comment::getRecipeId, commentDto.getRecipeId())
-                .eq(Comment::getRootId, commentDto.getRootId());
-        // 根据recipeId和rootId就可以查出该顶级评论下的二级评论了（包括回复顶级评论和不回复顶级评论的）
-
-        // 返回结果Vo
-        List<CommentVo> commentVos = new ArrayList<>();
-
-        // 加入分页
         PageHelper.startPage(commentDto.getPage(), commentDto.getPageSize());
-        Page<Comment> commentPage = (Page<Comment>) commentMapper.selectList(lambdaQueryWrapper);
-        List<Comment> comments = commentPage.getResult();
-        for (Comment comment : comments) {
-            if (comment.getToId() != null) {
-                // 说明这个评论是回复其他二级评论的----如果是回复顶级评论，这里是空的
-                Long senderId = comment.getUserId();
-                Long receiveId = comment.getToId();
+        Page<CommentVo> page = commentMapper.getByTopComment(commentDto);
+        return new PageResult(page.getTotal(), page.getResult());
+    }
 
-                /**
-                 * 根据发送者id和接收者id查询这两个用户的基本信息
-                 * 后续还要添加头像链接
-                 */
-                // 第一个是 发送者，第二个是接收者
-                User sender = userMapper.selectById(senderId);
-                User receiver = userMapper.selectById(receiveId);
-                CommentVo commentVo =
-                        CommentVo.builder().senderName(sender.getNickName()).senderId(senderId).senderAvatarUrl(sender.getAvatarUrl())
-                                .receiveName(receiver.getNickName()).receiverId(receiveId).receiverAvatarUrl(receiver.getAvatarUrl())
-                                .content(comment.getContent()).sendDateTime(comment.getCreateTime()).CommentId(comment.getCommentId())
-                                .build();
-                commentVos.add(commentVo);
-            } else {
-                // 顶级评论
-                User sender = userMapper.selectById(comment.getUserId());
-                CommentVo commentVo =
-                        CommentVo.builder().senderName(sender.getNickName()).senderId(comment.getCommentId()).senderAvatarUrl(sender.getAvatarUrl())
-                                .content(comment.getContent()).sendDateTime(comment.getCreateTime()).CommentId(comment.getCommentId())
-                                .build();
-                commentVos.add(commentVo);
-            }
-        }
+    /**
+     * 新增评论
+     *
+     * @param comment
+     */
+    @Override
+    public void add(Comment comment) {
+        // TODO userId还是从ThreadLocal中取
+        comment.setUserId(1L);
+        commentMapper.insert(comment);
+    }
 
-        return new PageResult(commentPage.getTotal(), commentVos);
+    /**
+     * 删除评论以及子评论
+     *
+     * @param commentId
+     */
+    @Override
+    public void delete(Long commentId) {
+        // 根据评论id删除根评论id，然后再删除所有rootId为该根评论id的评论
+        commentMapper.delete(new LambdaQueryWrapper<Comment>()
+                .eq(Comment::getCommentId, commentId)
+                .or()
+                .eq(Comment::getRootId, commentId)
+        );
     }
 }

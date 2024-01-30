@@ -2,11 +2,13 @@ package com.zzmr.fgback;
 
 import cn.hutool.json.JSONUtil;
 import com.zzmr.fgback.bean.Recipe;
-import com.zzmr.fgback.bean.User;
 import com.zzmr.fgback.mapper.RecipeMapper;
 import com.zzmr.fgback.mapper.UserMapper;
+import com.zzmr.fgback.properties.JwtProperties;
 import com.zzmr.fgback.service.UserService;
+import com.zzmr.fgback.util.JwtUtils;
 import com.zzmr.fgback.util.RedisUtils;
+import io.jsonwebtoken.Claims;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
@@ -14,9 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class FgBackApplicationTests {
@@ -35,6 +38,9 @@ class FgBackApplicationTests {
 
     @Autowired
     private RedisUtils redisUtils;
+
+    @Autowired
+    private JwtProperties jwtProperties;
 
     @Test
     void testRedis() {
@@ -65,6 +71,11 @@ class FgBackApplicationTests {
     }
 
     @Test
+    void cleanCache(){
+        redisUtils.cleanCache("recipe_*");
+    }
+
+    @Test
     void contextLoads() {
         redisTemplate.opsForValue().set("testKey", 1);
         System.out.println(redisTemplate.opsForValue().get("testKey"));
@@ -86,6 +97,19 @@ class FgBackApplicationTests {
         String fileName = "test.jpg";
         System.out.println(fileName.lastIndexOf("."));
         System.out.println(fileName.substring(4));
+    }
+
+    /**
+     * 测试token工具类
+     */
+    @Test
+    public void testToken() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", 1);
+        String token = JwtUtils.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
+        System.out.println(token);
+        Claims claims1 = JwtUtils.parseJWT(jwtProperties.getUserSecretKey(), token);
+        System.out.println(claims1.get("userId"));
     }
 
 }
