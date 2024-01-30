@@ -1,0 +1,31 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzmr.fgback.mapper.VegetableBasketMapper">
+
+    <resultMap id="VegetableBasketVoResultMap" type="com.zzmr.fgback.vo.VegetableBasketVo">
+        <result property="basketId" column="basket_id"/>
+        <result property="recipeId" column="recipe_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="basketName" column="basket_name"/>
+
+        <collection property="basketMaterialList" ofType="com.zzmr.fgback.bean.BasketMaterial">
+            <result property="basketId" column="basket_id"/>
+            <result property="materialName" column="material_name"/>
+            <result property="materialAmount" column="material_amount"/>
+        </collection>
+    </resultMap>
+
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="basketId">
+        insert into vegetable_basket(user_id, recipe_id, basket_name)
+        values (#{vb.userId}, #{vb.recipeId}, #{vb.basketName})
+    </insert>
+
+
+    <select id="getAll" resultMap="VegetableBasketVoResultMap">
+        SELECT vb.*,
+               bm.*
+        FROM vegetable_basket vb
+                 LEFT JOIN basket_material bm ON vb.basket_id = bm.basket_id
+        WHERE vb.user_id = 1
+    </select>
+</mapper>
