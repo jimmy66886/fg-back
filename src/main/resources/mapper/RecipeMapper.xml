@@ -120,4 +120,9 @@
         </where>
     </select>
 
+    <select id="getViews" resultType="com.zzmr.fgback.vo.RecipeViews">
+        SELECT recipe_id, views
+        FROM recipe
+    </select>
+
 </mapper>

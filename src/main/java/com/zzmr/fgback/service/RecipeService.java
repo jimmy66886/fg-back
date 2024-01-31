@@ -75,4 +75,10 @@ public interface RecipeService extends IService<Recipe> {
      * @param addRecipeDto
      */
     void updateOne(AddRecipeDto addRecipeDto);
+
+    /**
+     * 写菜谱浏览量缓存
+     */
+    void writeCache();
+
 }

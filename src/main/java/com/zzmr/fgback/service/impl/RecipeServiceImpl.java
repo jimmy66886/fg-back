@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zzmr.fgback.bean.*;
+import com.zzmr.fgback.constant.ViewConstant;
 import com.zzmr.fgback.dto.AddRecipeDto;
 import com.zzmr.fgback.dto.MaterialsDto;
 import com.zzmr.fgback.dto.RecipeDto;
@@ -11,16 +12,21 @@ import com.zzmr.fgback.mapper.*;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.RecipeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzmr.fgback.util.RedisUtils;
 import com.zzmr.fgback.vo.RecipeBasicVo;
+import com.zzmr.fgback.vo.RecipeViews;
 import com.zzmr.fgback.vo.RecipeVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -31,6 +37,7 @@ import java.util.List;
  * @since 2024-01-13
  */
 @Service
+@Slf4j
 public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> implements RecipeService {
 
     @Autowired
@@ -41,6 +48,9 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
 
     @Autowired
     private MaterialsMapper materialsMapper;
+
+    @Autowired
+    private RedisUtils redisUtils;
 
     /**
      * 根据菜谱id查询菜谱以及菜谱对应用料
@@ -181,4 +191,25 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
         materialsMapper.insertBatch(materialsList);
         recipeStepMapper.insertBatch(recipeStepList);
     }
+
+    /**
+     * 项目启动时写缓存
+     */
+    @PostConstruct
+    public void initViews() {
+        writeCache();
+    }
+
+    @Override
+    public void writeCache() {
+        log.info("菜谱浏览量写入缓存开始=====>");
+        // 获取菜谱的访问量
+        List<RecipeViews> viewsList = recipeMapper.getViews();
+        // 放到缓存中
+        for (RecipeViews recipeViews : viewsList) {
+            redisUtils.set("recipeView" + ":" + recipeViews.getRecipeId(), recipeViews.getViews() + "");
+        }
+        log.info("写入缓冲完成<=======");
+    }
+
 }

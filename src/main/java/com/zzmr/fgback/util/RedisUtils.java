@@ -140,4 +140,10 @@ public class RedisUtils {
         Set keys = redisTemplate.keys(pattern);
         redisTemplate.delete(keys);
     }
+
+    public Set getKeys(String pattern) {
+        Set keys = redisTemplate.keys(pattern);
+        return keys;
+    }
+
 }

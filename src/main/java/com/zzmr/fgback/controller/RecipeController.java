@@ -2,6 +2,7 @@ package com.zzmr.fgback.controller;
 
 
 import com.zzmr.fgback.bean.Recipe;
+import com.zzmr.fgback.constant.ViewConstant;
 import com.zzmr.fgback.dto.AddRecipeDto;
 import com.zzmr.fgback.dto.MaterialsDto;
 import com.zzmr.fgback.dto.RecipeDto;
@@ -13,6 +14,7 @@ import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,7 @@ import java.util.List;
 @RequestMapping("/recipe")
 @CrossOrigin
 @Api(tags = "菜谱相关接口")
+@Slf4j
 public class RecipeController {
 
     @Autowired
@@ -42,6 +45,10 @@ public class RecipeController {
     @ApiOperation("根据菜谱id查询菜谱以及菜谱对应用料")
     @GetMapping("/getById")
     public Result getByRecipeId(@RequestParam("recipeId") Long recipeId) {
+
+        // 访问量加一
+        redisUtils.increment("recipeView:" + recipeId, ViewConstant.AddOne);
+
         // 先查缓存
         RecipeVo recipeVo = redisUtils.getJsonToBean("recipe_" + recipeId, RecipeVo.class);
         if (recipeVo != null) {

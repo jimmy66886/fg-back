@@ -8,20 +8,20 @@ import com.zzmr.fgback.properties.JwtProperties;
 import com.zzmr.fgback.service.UserService;
 import com.zzmr.fgback.util.JwtUtils;
 import com.zzmr.fgback.util.RedisUtils;
+import com.zzmr.fgback.vo.RecipeViews;
 import io.jsonwebtoken.Claims;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SpringBootTest
+@Slf4j
 class FgBackApplicationTests {
 
     @Autowired
@@ -71,8 +71,8 @@ class FgBackApplicationTests {
     }
 
     @Test
-    void cleanCache(){
-        redisUtils.cleanCache("recipe_*");
+    void cleanCache() {
+        redisUtils.cleanCache("recipeView:*");
     }
 
     @Test
@@ -112,6 +112,31 @@ class FgBackApplicationTests {
         System.out.println(claims1.get("userId"));
     }
 
+    @Test
+    public void initViews() {
+        log.info("菜谱浏览量写入缓存开始=====>");
+        // 获取菜谱的访问量
+        List<RecipeViews> viewsList = recipeMapper.getViews();
+        // 放到缓存中
+        for (RecipeViews recipeViews : viewsList) {
+            redisUtils.set("recipeView" + ":" + recipeViews.getRecipeId(), String.valueOf(recipeViews.getViews()));
+        }
+        log.info("写入缓冲完成");
+    }
+
+    @Test
+    public void testIncrement() {
+        System.out.println("增加前:" + redisUtils.getLong("recipeView:2"));
+        redisUtils.increment("recipeView:2", 1L);
+        System.out.println("增加后:" + redisUtils.getLong("recipeView:2"));
+    }
+
+    @Test
+    public void testGetKeys() {
+        Set keys = redisUtils.getKeys("recipeView:*");
+        keys.forEach(System.out::println);
+    }
+
 }
 
 @Data
@@ -124,5 +149,3 @@ class Test2 {
     // private String id = 10L;
     private String id = "10";
 }
-
-
