@@ -7,6 +7,7 @@ import com.zzmr.fgback.dto.AddLikeDto;
 import com.zzmr.fgback.mapper.LikesMapper;
 import com.zzmr.fgback.service.LikesService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzmr.fgback.util.ContextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +32,9 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
      */
     @Override
     public void addLikes(AddLikeDto addLikeDto) {
-        // TODO 从ThreadLocal中取出用户id
         Likes likes = new Likes();
         // 先假设为1
-        likes.setUserId(1L);
+        likes.setUserId(ContextUtils.getCurrentId());
         if (addLikeDto.getCommentId() != null) {
             likes.setContentType(LikesConstant.CommentType);
             likes.setContentId(addLikeDto.getCommentId());
@@ -54,11 +54,10 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
      */
     @Override
     public Boolean getLiked(Long recipeId) {
-        // TODO 从ThreadLocal中取出用户id
         Integer value = likesMapper.selectCount(new LambdaQueryWrapper<Likes>()
                 .eq(Likes::getContentType, LikesConstant.RecipeType)
                 .eq(Likes::getContentId, recipeId)
-                .eq(Likes::getUserId, 1L)
+                .eq(Likes::getUserId, ContextUtils.getCurrentId())
         );
         if (value > 0) {
             return Boolean.TRUE;

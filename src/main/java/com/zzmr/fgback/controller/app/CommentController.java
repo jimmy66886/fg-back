@@ -1,4 +1,4 @@
-package com.zzmr.fgback.controller;
+package com.zzmr.fgback.controller.app;
 
 
 import com.zzmr.fgback.bean.Comment;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2024-01-13
  */
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/app/comment")
 @Api(tags = "评论相关接口")
 @Slf4j
 @CrossOrigin

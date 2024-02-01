@@ -1,4 +1,4 @@
-package com.zzmr.fgback.controller;
+package com.zzmr.fgback.controller.app;
 
 
 import com.zzmr.fgback.bean.VegetableBasket;
@@ -22,7 +22,7 @@ import java.util.List;
  * @since 2024-01-30
  */
 @RestController
-@RequestMapping("/vegetableBasket")
+@RequestMapping("/app/vegetableBasket")
 @Api(tags = "菜篮子相关接口")
 public class VegetableBasketController {
 

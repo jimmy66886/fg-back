@@ -1,4 +1,4 @@
-package com.zzmr.fgback.controller;
+package com.zzmr.fgback.controller.app;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author zzmr
- * @since 2024-01-30
+ * @since 2024-01-24
  */
 @RestController
-@RequestMapping("/basketMaterial")
-public class BasketMaterialController {
+@RequestMapping("/app/favorites")
+public class FavoritesController {
 
 }
 

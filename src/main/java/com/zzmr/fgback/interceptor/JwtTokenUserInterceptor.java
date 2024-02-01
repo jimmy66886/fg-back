@@ -1,6 +1,8 @@
 package com.zzmr.fgback.interceptor;
 
+import com.zzmr.fgback.constant.JwtClaimsConstant;
 import com.zzmr.fgback.properties.JwtProperties;
+import com.zzmr.fgback.util.ContextUtils;
 import com.zzmr.fgback.util.JwtUtils;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * jwt令牌校验的拦截器--- 用户端
  */
-// @Component
+@Component
 @Slf4j
 public class JwtTokenUserInterceptor implements HandlerInterceptor {
 
-    // @Autowired
+    @Autowired
     private JwtProperties jwtProperties;
 
     /**
@@ -33,7 +35,7 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        System.out.println("当前线程的id" + Thread.currentThread().getId());
+        log.info("当前线程的id:{}",Thread.currentThread().getId());
 
         // 判断当前拦截到的是Controller的方法还是其他资源
         if (!(handler instanceof HandlerMethod)) {
@@ -48,10 +50,10 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
         try {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtils.parseJWT(jwtProperties.getUserSecretKey(), token);
-            Long userId = Long.valueOf(claims.get("userId").toString());
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
             log.info("当前用户id：{}", userId);
-            // 将empId存入ThreadLocal
-            // BaseContextByMe.setCurrentId(userId);
+            // 将userId存入ThreadLocal
+            ContextUtils.setCurrentId(userId);
             // 3、通过，放行
             return true;
         } catch (Exception ex) {

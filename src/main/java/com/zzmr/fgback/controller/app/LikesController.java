@@ -1,4 +1,4 @@
-package com.zzmr.fgback.controller;
+package com.zzmr.fgback.controller.app;
 
 
 import com.zzmr.fgback.bean.Likes;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2024-01-13
  */
 @RestController
-@RequestMapping("/likes")
+@RequestMapping("/app/likes")
 @Api(tags = "点赞相关接口")
 public class LikesController {
 

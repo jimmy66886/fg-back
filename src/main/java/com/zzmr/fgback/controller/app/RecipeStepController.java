@@ -1,4 +1,4 @@
-package com.zzmr.fgback.controller;
+package com.zzmr.fgback.controller.app;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-01-24
  */
 @RestController
-@RequestMapping("/favorites")
-public class FavoritesController {
+@RequestMapping("/app/recipeStep")
+public class RecipeStepController {
 
 }
 

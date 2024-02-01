@@ -10,6 +10,7 @@ import com.zzmr.fgback.mapper.MaterialsMapper;
 import com.zzmr.fgback.mapper.VegetableBasketMapper;
 import com.zzmr.fgback.service.VegetableBasketService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzmr.fgback.util.ContextUtils;
 import com.zzmr.fgback.vo.VegetableBasketVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +49,9 @@ public class VegetableBasketServiceImpl extends ServiceImpl<VegetableBasketMappe
     @Override
     @Transactional
     public void add(AddVegeBasketDto addVegeBasketDto) {
-        // TODO 从threadLocal中取出userId
         VegetableBasket vegetableBasket = new VegetableBasket();
         BeanUtils.copyProperties(addVegeBasketDto, vegetableBasket);
-        vegetableBasket.setUserId(1L);
+        vegetableBasket.setUserId(ContextUtils.getCurrentId());
         vegetableBasketMapper.insertOne(vegetableBasket);
         Long basketId = vegetableBasket.getBasketId();
 
@@ -85,8 +85,7 @@ public class VegetableBasketServiceImpl extends ServiceImpl<VegetableBasketMappe
      */
     @Override
     public List<VegetableBasketVo> getAll() {
-        // TODO 从threadLocal中取出userId
-        Long userId = 1L;
+        Long userId = ContextUtils.getCurrentId();
         return vegetableBasketMapper.getAll(userId);
     }
 

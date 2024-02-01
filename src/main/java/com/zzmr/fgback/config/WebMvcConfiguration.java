@@ -6,12 +6,16 @@ package com.zzmr.fgback.config;
  */
 
 
+import com.zzmr.fgback.interceptor.JwtTokenAdminInterceptor;
+import com.zzmr.fgback.interceptor.JwtTokenUserInterceptor;
 import com.zzmr.fgback.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -29,6 +33,30 @@ import java.util.List;
 @Configuration
 @Slf4j
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
+
+    @Autowired
+    private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+
+    @Autowired
+    private JwtTokenUserInterceptor jwtTokenUserInterceptor;
+
+    /**
+     * 注册自定义拦截器
+     *
+     * @param registry
+     */
+    protected void addInterceptors(InterceptorRegistry registry) {
+        log.info("开始注册自定义拦截器...");
+        registry.addInterceptor(jwtTokenAdminInterceptor)
+                .addPathPatterns("/admin/**")
+                .excludePathPatterns("/admin/user/login");
+        registry.addInterceptor(jwtTokenUserInterceptor)
+                .addPathPatterns("/app/**")
+                .excludePathPatterns("/app/user/login")
+                .excludePathPatterns("/app/user/register")
+                .excludePathPatterns("/app/recipe/getList")
+        ;
+    }
 
     /**
      * 扩展SpringMVC框架的消息转换器

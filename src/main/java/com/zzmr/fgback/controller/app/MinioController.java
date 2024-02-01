@@ -1,4 +1,4 @@
-package com.zzmr.fgback.controller;
+package com.zzmr.fgback.controller.app;
 
 import com.zzmr.fgback.exception.BaseException;
 import com.zzmr.fgback.result.Result;

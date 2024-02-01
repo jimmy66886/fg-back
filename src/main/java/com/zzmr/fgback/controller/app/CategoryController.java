@@ -1,4 +1,4 @@
-package com.zzmr.fgback.controller;
+package com.zzmr.fgback.controller.app;
 
 
 import com.zzmr.fgback.bean.Category;
@@ -25,7 +25,7 @@ import java.util.List;
  * @since 2024-01-13
  */
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/app/category")
 @Api(tags = "分类相关接口")
 public class CategoryController {
 

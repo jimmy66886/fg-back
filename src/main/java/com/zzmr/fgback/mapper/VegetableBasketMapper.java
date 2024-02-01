@@ -30,5 +30,5 @@ public interface VegetableBasketMapper extends BaseMapper<VegetableBasket> {
      * @param userId
      * @return
      */
-    List<VegetableBasketVo> getAll(Long userId);
+    List<VegetableBasketVo> getAll(@Param("userId") Long userId);
 }

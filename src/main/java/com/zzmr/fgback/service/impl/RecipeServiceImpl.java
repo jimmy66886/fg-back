@@ -12,6 +12,7 @@ import com.zzmr.fgback.mapper.*;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.RecipeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzmr.fgback.util.ContextUtils;
 import com.zzmr.fgback.util.RedisUtils;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeViews;
@@ -149,6 +150,7 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
         Recipe recipe = new Recipe();
         BeanUtils.copyProperties(addRecipeDto, recipe);
         recipe.setViews(0);
+        recipe.setAuthorId(ContextUtils.getCurrentId());
         recipeMapper.insertOne(recipe);
         // 得到主键
         insertOthers(addRecipeDto, recipe);

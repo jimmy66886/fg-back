@@ -26,6 +26,6 @@
                bm.*
         FROM vegetable_basket vb
                  LEFT JOIN basket_material bm ON vb.basket_id = bm.basket_id
-        WHERE vb.user_id = 1
+        WHERE vb.user_id = #{userId}
     </select>
 </mapper>

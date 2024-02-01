@@ -1,4 +1,4 @@
-package com.zzmr.fgback.controller;
+package com.zzmr.fgback.controller.app;
 
 
 import com.zzmr.fgback.bean.Recipe;
@@ -30,7 +30,7 @@ import java.util.List;
  * @since 2024-01-13
  */
 @RestController
-@RequestMapping("/recipe")
+@RequestMapping("/app/recipe")
 @CrossOrigin
 @Api(tags = "菜谱相关接口")
 @Slf4j

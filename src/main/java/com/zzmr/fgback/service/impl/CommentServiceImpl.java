@@ -9,6 +9,7 @@ import com.zzmr.fgback.mapper.CommentMapper;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzmr.fgback.util.ContextUtils;
 import com.zzmr.fgback.vo.CommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,8 +63,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
      */
     @Override
     public void add(Comment comment) {
-        // TODO userId还是从ThreadLocal中取
-        comment.setUserId(1L);
+        comment.setUserId(ContextUtils.getCurrentId());
         commentMapper.insert(comment);
     }
 
