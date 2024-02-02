@@ -2,4 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzmr.fgback.mapper.FavoritesMapper">
 
+    <select id="getAllFavorites" resultType="com.zzmr.fgback.vo.FavoritesVo">
+        SELECT fs.*,
+               (SELECT count(*) FROM favorite f WHERE f.favorites_id = fs.favorites_id) as number
+        FROM favorites fs
+        WHERE fs.user_id = #{userId}
+    </select>
+
+    <select id="getCoverImg" resultType="java.lang.String">
+        SELECT r.image_url
+        FROM favorites fs
+                 LEFT JOIN favorite f ON fs.favorites_id = f.favorites_id
+                 LEFT JOIN recipe r ON r.recipe_id = f.recipe_id
+        WHERE fs.favorites_id = #{favoritesId}
+        ORDER BY f.create_time DESC
+        LIMIT 1
+    </select>
+
+
+    <select id="getRecipeList" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
+        SELECT r.*,
+        (SELECT count(*)
+        FROM likes
+        WHERE likes.content_type = 'recipe'
+        AND likes.content_id = r.recipe_id) AS like_number,
+        (SELECT count(*) FROM favorite WHERE favorite.recipe_id = r.recipe_id) AS favorite_number,
+        `user`.nick_name
+        FROM recipe r
+        LEFT JOIN `user` ON r.author_id = `user`.user_id
+        WHERE r.recipe_id IN (SELECT f.recipe_id
+        FROM favorite f
+        <where>
+            <if test="favorite.favoritesId != null and favorite.favoritesId != ''">
+                AND f.favorites_id = #{favorite.favoritesId}
+            </if>
+            <if test="favorite.userId != null and favorite.userId !=''">
+                AND f.user_id = #{favorite.userId}
+            </if>
+        </where>
+        )
+    </select>
 </mapper>

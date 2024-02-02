@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzmr.fgback.mapper.FavoriteMapper">
+    <update id="updateOne">
+        update favorite
+        set favorites_id = #{favorite.favoritesId}
+        where user_id = #{favorite.userId}
+          and recipe_id = #{favorite.recipeId}
+    </update>
 
+    <select id="getFavoriteVo" resultType="com.zzmr.fgback.vo.FavoriteVo">
+        SELECT f.*,recipe.image_url as cover_img
+        FROM favorite f
+                 LEFT JOIN recipe ON f.recipe_id = recipe.recipe_id
+        WHERE f.user_id = #{userId}
+        ORDER BY f.create_time desc
+    </select>
 </mapper>

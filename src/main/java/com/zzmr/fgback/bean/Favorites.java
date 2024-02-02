@@ -38,5 +38,7 @@ public class Favorites implements Serializable {
     @ApiModelProperty(value = "收藏夹名称")
     private String name;
 
+    @ApiModelProperty(value = "收藏夹描述")
+    private String intro;
 
 }

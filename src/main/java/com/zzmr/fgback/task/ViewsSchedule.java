@@ -30,8 +30,9 @@ public class ViewsSchedule {
 
     /**
      * 从缓存中更新数据库中菜谱的访问量
+     * 项目完成时改成2分钟一次，开发阶段设为10分钟一次
      */
-    @Scheduled(cron = "0 0/2 * * * ? ")
+    @Scheduled(cron = "0 0/10 * * * ? ")
     public void updateViews() {
         log.info("定时任务开始:更新浏览量开始====>");
         Set<String> keys = redisUtils.getKeys("recipeView:*");
