@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zzmr.fgback.bean.*;
+import com.zzmr.fgback.constant.OrderConstant;
 import com.zzmr.fgback.constant.ViewConstant;
 import com.zzmr.fgback.dto.AddRecipeDto;
 import com.zzmr.fgback.dto.MaterialsDto;
@@ -18,6 +19,7 @@ import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeViews;
 import com.zzmr.fgback.vo.RecipeVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -96,13 +98,18 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
 
     /**
      * 分页查询菜谱列表
+     * 有三种排序方式，默认是
      *
      * @param recipeDto
      * @return
      */
     @Override
     public PageResult getRecipeList(RecipeDto recipeDto) {
-        PageHelper.startPage(recipeDto.getPage(), recipeDto.getPageSize());
+        if (StringUtils.isEmpty(recipeDto.getOrderBy())) {
+            // 如果排序字段为空，那就是默认使用create_time降序排序
+            recipeDto.setOrderBy(OrderConstant.DEFAULT);
+        }
+        PageHelper.startPage(recipeDto.getPage(), recipeDto.getPageSize(), recipeDto.getOrderBy() + OrderConstant.DESC);
         Page<RecipeBasicVo> page = recipeMapper.getRecipeList(recipeDto.getTitle());
         return new PageResult(page.getTotal(), page.getResult());
     }

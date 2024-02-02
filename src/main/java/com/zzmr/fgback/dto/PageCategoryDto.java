@@ -20,4 +20,7 @@ public class PageCategoryDto {
     @ApiModelProperty(value = "分类名",example = "家常菜")
     private String name;
 
+    @ApiModelProperty(value = "排序方式")
+    private String orderBy;
+
 }

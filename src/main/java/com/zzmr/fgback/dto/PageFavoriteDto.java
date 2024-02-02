@@ -15,4 +15,6 @@ public class PageFavoriteDto implements Serializable {
     private Integer pageSize;
 
     private Long userId;
+
+    private String orderBy;
 }

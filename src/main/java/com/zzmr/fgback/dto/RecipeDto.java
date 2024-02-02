@@ -22,4 +22,7 @@ public class RecipeDto {
     @ApiModelProperty(value = "页面大小")
     private Integer pageSize;
 
+    @ApiModelProperty(value = "排序方式")
+    private String orderBy;
+
 }

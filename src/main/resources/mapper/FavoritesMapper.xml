@@ -41,5 +41,6 @@
             </if>
         </where>
         )
+        ORDER BY (SELECT MAX(f.create_time) FROM favorite f WHERE f.recipe_id = r.recipe_id) DESC
     </select>
 </mapper>
