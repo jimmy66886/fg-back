@@ -25,7 +25,7 @@ public class CodeGet {
         GlobalConfig gc = new GlobalConfig();
         gc.setOutputDir("D:\\study\\GraduationDesign\\code\\fg-back\\src\\main\\java");
 
-        gc.setServiceName("%sService");	//去掉Service接口的首字母I
+        gc.setServiceName("%sService");    // 去掉Service接口的首字母I
         gc.setAuthor("zzmr");
         gc.setOpen(false);
         mpg.setGlobalConfig(gc);
@@ -42,8 +42,8 @@ public class CodeGet {
         // 4、包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.zzmr");
-        pc.setModuleName("fgback"); //模块名
-        pc.setController("controller");
+        pc.setModuleName("fgback"); // 模块名
+        pc.setController("controller.app");
         pc.setService("service");
         pc.setMapper("mapper");
         mpg.setPackageInfo(pc);
@@ -61,15 +61,15 @@ public class CodeGet {
         // strategy.setInclude("user");
         // strategy.setInclude("favorites","recipe_step");
         // strategy.setInclude("vegetable_basket");
-        strategy.setInclude("basket_material");
+        strategy.setInclude("followers");
 
-        strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
+        strategy.setNaming(NamingStrategy.underline_to_camel);// 数据库表映射到实体的命名策略
 
-        strategy.setColumnNaming(NamingStrategy.underline_to_camel);//数据库表字段映射到实体的命名策略
+        strategy.setColumnNaming(NamingStrategy.underline_to_camel);// 数据库表字段映射到实体的命名策略
         strategy.setEntityLombokModel(true); // lombok 模型 @Accessors(chain = true) setter链式操作
 
-        strategy.setRestControllerStyle(true); //restful api风格控制器
-        strategy.setControllerMappingHyphenStyle(true); //url中驼峰转连字符
+        strategy.setRestControllerStyle(true); // restful api风格控制器
+        strategy.setControllerMappingHyphenStyle(true); // url中驼峰转连字符
 
         mpg.setStrategy(strategy);
 

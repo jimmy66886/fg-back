@@ -1,0 +1,18 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzmr.fgback.mapper.FollowersMapper">
+
+    <select id="getList" resultType="com.zzmr.fgback.vo.FollowersVo">
+        SELECT u.avatar_url, u.nick_name, u.user_id
+        FROM followers f
+                 LEFT JOIN `user` u ON f.following_id = u.user_id
+        WHERE f.follower_id = #{followerId}
+    </select>
+
+    <select id="getFans" resultType="com.zzmr.fgback.vo.FollowersVo">
+        -- 粉丝列表
+        SELECT u.avatar_url, u.nick_name, u.user_id
+        FROM followers f
+                 LEFT JOIN `user` u ON f.follower_id = u.user_id
+        WHERE f.following_id = #{followingId}
+    </select>
+</mapper>

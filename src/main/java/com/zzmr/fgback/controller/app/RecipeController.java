@@ -132,5 +132,11 @@ public class RecipeController {
         return Result.success();
     }
 
+    @GetMapping("/test")
+    public Result test() {
+        List<Recipe> list = recipeService.list();
+        return Result.success(list);
+    }
+
 }
 

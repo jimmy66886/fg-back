@@ -55,6 +55,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/app/user/login")
                 .excludePathPatterns("/app/user/register")
                 .excludePathPatterns("/app/recipe/getList")
+                .excludePathPatterns("/app/recipe/test")
         ;
     }
 
@@ -87,12 +88,30 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("接口文档")
                 .version("2.0")
-                .description("美食教程小程序接口文档")
+                .description("美食教程小程序用户端接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端接口")
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.zzmr.fgback.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.zzmr.fgback.controller.app"))
+                .paths(PathSelectors.any())
+                .build();
+        return docket;
+    }
+
+    @Bean
+    public Docket docket1() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("接口文档")
+                .version("2.0")
+                .description("美食教程小程序管理端接口文档")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("管理端接口")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.zzmr.fgback.controller.admin"))
                 .paths(PathSelectors.any())
                 .build();
         return docket;
