@@ -1,5 +1,6 @@
 package com.zzmr.fgback.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,8 +12,13 @@ import java.io.Serializable;
 @Data
 public class UserLoginDto implements Serializable {
 
-    private String account;
-
     private String password;
+
+    private String email;
+
+    @ApiModelProperty(value = "验证码")
+    private String code;
+
+    private Boolean isRegister;
 
 }

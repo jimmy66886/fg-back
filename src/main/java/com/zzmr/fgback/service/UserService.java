@@ -3,6 +3,7 @@ package com.zzmr.fgback.service;
 import com.zzmr.fgback.bean.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zzmr.fgback.dto.UserLoginDto;
+import com.zzmr.fgback.dto.UserRegisterDto;
 
 /**
  * <p>
@@ -21,4 +22,18 @@ public interface UserService extends IService<User> {
      * @return
      */
     User login(UserLoginDto userLoginDto);
+
+    /**
+     * 获取验证码
+     *
+     * @return
+     */
+    String getCode(UserLoginDto userLoginDto);
+
+    /**
+     * 用户注册
+     *
+     * @param userRegisterDto
+     */
+    void register(UserRegisterDto userRegisterDto);
 }

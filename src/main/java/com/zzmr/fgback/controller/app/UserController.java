@@ -4,6 +4,7 @@ package com.zzmr.fgback.controller.app;
 import com.zzmr.fgback.bean.User;
 import com.zzmr.fgback.constant.JwtClaimsConstant;
 import com.zzmr.fgback.dto.UserLoginDto;
+import com.zzmr.fgback.dto.UserRegisterDto;
 import com.zzmr.fgback.properties.JwtProperties;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.UserService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * <p>
@@ -41,7 +43,13 @@ public class UserController {
     @Autowired
     private JwtProperties jwtProperties;
 
-    @ApiOperation("用户登录")
+    /**
+     * 只保留邮箱登录，手机号登录删除
+     *
+     * @param userLoginDto
+     * @return
+     */
+    @ApiOperation("用户登录-邮箱密码登录或邮箱验证码登录")
     @PostMapping("/login")
     public Result login(@RequestBody UserLoginDto userLoginDto) {
         User user = userService.login(userLoginDto);
@@ -59,6 +67,21 @@ public class UserController {
         BeanUtils.copyProperties(user, userLoginVo);
         userLoginVo.setToken(token);
         return Result.success(userLoginVo);
+    }
+
+    @ApiOperation("获取验证码")
+    @PostMapping("/getCode")
+    public Result getCode(@RequestBody UserLoginDto userLoginDto) {
+        // 前端只需要传来一个email,后端返回一个code
+        String code = userService.getCode(userLoginDto);
+        return Result.success(code);
+    }
+
+    @ApiOperation("用户注册")
+    @PostMapping("/register")
+    public Result register(@RequestBody UserRegisterDto userRegisterDto) {
+        userService.register(userRegisterDto);
+        return Result.success();
     }
 
 }
