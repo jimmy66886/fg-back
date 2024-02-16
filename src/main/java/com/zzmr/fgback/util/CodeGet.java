@@ -61,7 +61,7 @@ public class CodeGet {
         // strategy.setInclude("user");
         // strategy.setInclude("favorites","recipe_step");
         // strategy.setInclude("vegetable_basket");
-        strategy.setInclude("followers");
+        strategy.setInclude("one_word");
 
         strategy.setNaming(NamingStrategy.underline_to_camel);// 数据库表映射到实体的命名策略
 

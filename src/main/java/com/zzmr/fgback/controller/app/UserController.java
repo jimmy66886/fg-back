@@ -74,7 +74,7 @@ public class UserController {
     public Result getCode(@RequestBody UserLoginDto userLoginDto) {
         // 前端只需要传来一个email,后端返回一个code
         String code = userService.getCode(userLoginDto);
-        return Result.success(code);
+        return Result.success();
     }
 
     @ApiOperation("用户注册")

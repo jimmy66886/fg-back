@@ -56,7 +56,10 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/app/user/register")
                 .excludePathPatterns("/app/recipe/getList")
                 .excludePathPatterns("/app/recipe/test")
-                .excludePathPatterns("/app/user/getCode");
+                .excludePathPatterns("/app/user/getCode")
+                .excludePathPatterns("/app/recipe/getById")
+                .excludePathPatterns("/app/recipe/getByMaterials")
+                .excludePathPatterns("/app/oneWord/get");
     }
 
     /**
