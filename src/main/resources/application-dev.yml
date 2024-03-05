@@ -31,3 +31,6 @@ minio:
   access-key: paJorTMGQnUHTlZ5PWJ1
   secre-key: gwDjy61ZhVEQI7z2IOLu9q2dIAaw4ujifoUrCNSM
   bucketName: food.guide
+bce:
+  api-key: A9HuX3eLPiBQcPyA7Vh05YI5
+  secret-key: aXimcGD5fYzLnjQ06geUtgzp9s487hcg

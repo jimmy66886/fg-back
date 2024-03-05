@@ -1,6 +1,8 @@
 package com.zzmr.fgback.util;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * 文件读取工具类
@@ -67,6 +69,30 @@ public class FileUtil {
 
                 bos.close();
             }
+        }
+    }
+
+    /**
+     * 读取网络图片的字节数组
+     */
+    public static byte[] readUrlImageAsBytes(String imageUrl) throws IOException {
+        URL url = new URL(imageUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+
+        // 读取网络图片的字节流
+        try (InputStream inputStream = connection.getInputStream();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            return outputStream.toByteArray();
+        } finally {
+            connection.disconnect();
         }
     }
 }

@@ -4,7 +4,10 @@ package com.zzmr.fgback.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zzmr.fgback.properties.BceProperties;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -12,7 +15,15 @@ import java.net.URLEncoder;
 /**
  * 菜品识别
  */
+@Component
 public class DishUtils {
+
+    private static BceProperties bceProperties;
+
+    @Autowired
+    public DishUtils(BceProperties bceProperties) {
+        DishUtils.bceProperties = bceProperties;
+    }
 
     static final OkHttpClient HTTP_CLIENT = new OkHttpClient().newBuilder().build();
 
@@ -24,14 +35,16 @@ public class DishUtils {
      * https://ai.baidu.com/file/544D677F5D4E4F17B4122FBD60DB82B3
      * https://ai.baidu.com/file/470B3ACCA3FE43788B5A963BF0B625F3
      * 下载
+     * 直接调用这个方法,方法返回最接近的菜品名
+     * 用的时候直接将图片链接传进来就行
      */
-    public static String recognition(String accessToken) {
+    public static String recognition(String filePath) throws IOException {
+        String accessToken = getAccessToken();
         // 请求url
         String url = "https://aip.baidubce.com/rest/2.0/image-classify/v2/dish";
         try {
             // 本地文件路径
-            String filePath = "D:\\study\\GraduationDesign\\素材\\凉拌土豆丝.png";
-            byte[] imgData = FileUtil.readFileByBytes(filePath);
+            byte[] imgData = FileUtil.readUrlImageAsBytes(filePath);
             String imgStr = Base64Util.encode(imgData);
             String imgParam = URLEncoder.encode(imgStr, "UTF-8");
 
@@ -51,12 +64,6 @@ public class DishUtils {
         return null;
     }
 
-    public static void main(String[] args) throws IOException {
-        String accessToken = getAccessToken();
-        String result = DishUtils.recognition(accessToken);
-        System.out.println("您是否在找: " + result);
-    }
-
     /**
      * 获取鉴权token
      *
@@ -67,8 +74,8 @@ public class DishUtils {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "");
         Request request = new Request.Builder()
-                .url("https://aip.baidubce.com/oauth/2.0/token?client_id=A9HuX3eLPiBQcPyA7Vh05YI5&client_secret" +
-                        "=aXimcGD5fYzLnjQ06geUtgzp9s487hcg&grant_type=client_credentials")
+                .url("https://aip.baidubce.com/oauth/2.0/token?client_id=" + bceProperties.getApiKey() +
+                        "&client_secret=" + bceProperties.getSecretKey() + "&grant_type=client_credentials")
                 .method("POST", body)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
