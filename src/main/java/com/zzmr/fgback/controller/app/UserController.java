@@ -5,6 +5,7 @@ import com.zzmr.fgback.bean.User;
 import com.zzmr.fgback.constant.JwtClaimsConstant;
 import com.zzmr.fgback.dto.UserLoginDto;
 import com.zzmr.fgback.dto.UserRegisterDto;
+import com.zzmr.fgback.dto.WxLoginDto;
 import com.zzmr.fgback.properties.JwtProperties;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.UserService;
@@ -44,12 +45,36 @@ public class UserController {
     private JwtProperties jwtProperties;
 
     /**
+     * 登录接口重写,注册接口删掉,只实现微信登录
+     */
+    @ApiOperation("微信登录")
+    @PostMapping("/login")
+    public Result login(@RequestBody WxLoginDto wxLoginDto) {
+        log.info("微信用户登录,授权码:{}", wxLoginDto.getCode());
+        User user = userService.wxLogin(wxLoginDto);
+        // 登录成功，生成token
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaimsConstant.USER_ID, user.getUserId());
+
+        String token = JwtUtils.createJWT(
+                jwtProperties.getUserSecretKey(),
+                jwtProperties.getUserTtl(),
+                claims);
+        UserLoginVo userLoginVo = new UserLoginVo();
+        BeanUtils.copyProperties(user, userLoginVo);
+        userLoginVo.setToken(token);
+        return Result.success(userLoginVo);
+    }
+
+
+    /**
      * 只保留邮箱登录，手机号登录删除
      *
      * @param userLoginDto
      * @return
      */
-    @ApiOperation("用户登录-邮箱密码登录或邮箱验证码登录")
+    /*@ApiOperation("用户登录-邮箱密码登录或邮箱验证码登录")
     @PostMapping("/login")
     public Result login(@RequestBody UserLoginDto userLoginDto) {
         User user = userService.login(userLoginDto);
@@ -67,8 +92,7 @@ public class UserController {
         BeanUtils.copyProperties(user, userLoginVo);
         userLoginVo.setToken(token);
         return Result.success(userLoginVo);
-    }
-
+    }*/
     @ApiOperation("获取验证码")
     @PostMapping("/getCode")
     public Result getCode(@RequestBody UserLoginDto userLoginDto) {

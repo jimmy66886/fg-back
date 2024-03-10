@@ -1,13 +1,18 @@
 package com.zzmr.fgback.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zzmr.fgback.bean.User;
 import com.zzmr.fgback.dto.UserLoginDto;
 import com.zzmr.fgback.dto.UserRegisterDto;
+import com.zzmr.fgback.dto.WxLoginDto;
 import com.zzmr.fgback.exception.BaseException;
 import com.zzmr.fgback.mapper.UserMapper;
+import com.zzmr.fgback.properties.WechatProperties;
 import com.zzmr.fgback.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzmr.fgback.util.HttpClientUtil;
 import com.zzmr.fgback.util.MailUtils;
 import com.zzmr.fgback.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +20,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -37,6 +44,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private MailUtils mailUtils;
+
+    @Autowired
+    private WechatProperties wechatProperties;
+
+    private static final String WX_LOGIN = "https://api.weixin.qq.com/sns/jscode2session";
 
 
     /**
@@ -126,6 +138,46 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         BeanUtils.copyProperties(userRegisterDto, user);
         userMapper.insert(user);
+    }
+
+    @Override
+    public User wxLogin(WxLoginDto wxLoginDto) {
+        String openid = getString(wxLoginDto);
+        // 判断其openid是否为空
+        if (openid == null) {
+            throw new BaseException("登陆失败");
+        }
+        log.info("用户的openid为:{}", openid);
+
+        // 根据openid在数据库中查询,如果存在该openid则表示用户已注册,反之自动为用户进行注册
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getOpenid, openid));
+        if (user == null) {
+            // 新用户,则进行注册
+            user = User.builder().openid(openid).build();
+            userMapper.insert(user);
+        }
+        // 已注册,则直接返回
+        return user;
+    }
+
+    /**
+     * 将根据userLoginDTO获取openId的片段抽取成一个方法
+     *
+     * @return
+     */
+    private String getString(WxLoginDto wxLoginDto) {
+        // 1. 调用微信接口服务 获取openId
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("appId", wechatProperties.getAppid());
+        paramMap.put("secret", wechatProperties.getSecret());
+        paramMap.put("js_code", wxLoginDto.getCode());
+        paramMap.put("grant_type", "authorization_code");
+
+        String json = HttpClientUtil.doGet(WX_LOGIN, paramMap);
+
+        JSONObject jsonObject = JSON.parseObject(json);
+        String openId = jsonObject.getString("openid");
+        return openId;
     }
 
     // 生成随机的四位数字验证码

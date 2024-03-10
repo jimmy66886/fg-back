@@ -25,4 +25,8 @@ public class UserLoginVo {
 
     private String token;
 
+    private String openid;
+
+    private String avatarUrl;
+
 }

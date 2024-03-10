@@ -65,5 +65,8 @@ public class User implements Serializable {
     @ApiModelProperty(value = "上一次查看消息的时间戳")
     private Long lastReadMessageTime;
 
+    @ApiModelProperty(value = "微信openid")
+    private String openid;
+
 
 }

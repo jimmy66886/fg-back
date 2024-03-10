@@ -33,3 +33,6 @@ fg:
     user-ttl: 7200000
     # 设置前端传来的令牌名称
     user-token-name: token
+  wechat:
+    appid: wx26b00f9454de88a6
+    secret: 6c4ad5db6efb880425969b7afe4099c7

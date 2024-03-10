@@ -4,6 +4,7 @@ import com.zzmr.fgback.bean.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zzmr.fgback.dto.UserLoginDto;
 import com.zzmr.fgback.dto.UserRegisterDto;
+import com.zzmr.fgback.dto.WxLoginDto;
 
 /**
  * <p>
@@ -36,4 +37,12 @@ public interface UserService extends IService<User> {
      * @param userRegisterDto
      */
     void register(UserRegisterDto userRegisterDto);
+
+    /**
+     * 微信登陆
+     *
+     * @param wxLoginDto
+     * @return
+     */
+    User wxLogin(WxLoginDto wxLoginDto);
 }
