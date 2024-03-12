@@ -12,13 +12,12 @@ import com.zzmr.fgback.mapper.UserMapper;
 import com.zzmr.fgback.properties.WechatProperties;
 import com.zzmr.fgback.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zzmr.fgback.util.HttpClientUtil;
-import com.zzmr.fgback.util.MailUtils;
-import com.zzmr.fgback.util.RedisUtils;
+import com.zzmr.fgback.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +46,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private WechatProperties wechatProperties;
+
+    @Autowired
+    private MinioUtils minioUtils;
 
     private static final String WX_LOGIN = "https://api.weixin.qq.com/sns/jscode2session";
 
@@ -153,11 +155,41 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getOpenid, openid));
         if (user == null) {
             // 新用户,则进行注册
-            user = User.builder().openid(openid).build();
+            // 并设置默认的用户名和密码,用户名就用“微信用户+xxxx”四位数字表示
+            user = User.builder().openid(openid).nickName("微信用户" + generateVerificationCode()).avatarUrl("http://47" +
+                    ".109.139.173:9000/food.guide/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F.jpg").build();
             userMapper.insert(user);
         }
         // 已注册,则直接返回
         return user;
+    }
+
+    /**
+     * 负责更新昵称，个人签名这两项
+     *
+     * @param user
+     */
+    @Override
+    public void updateBasic(User user) {
+        user.setUserId(ContextUtils.getCurrentId());
+        userMapper.updateById(user);
+    }
+
+    /**
+     * 更新用户头像
+     *
+     * @param avatarImg
+     * @return
+     */
+    @Override
+    public String updateAvatar(MultipartFile avatarImg) {
+        String imgUrl = minioUtils.upload(avatarImg);
+        // 将新头像插入数据库
+        User user = new User();
+        user.setAvatarUrl(imgUrl);
+        user.setUserId(ContextUtils.getCurrentId());
+        userMapper.updateById(user);
+        return imgUrl;
     }
 
     /**

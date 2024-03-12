@@ -17,6 +17,7 @@
         <result property="likeNumber" column="like_number"/>
         <result property="favoriteNumber" column="favorite_number"/>
         <result property="nickName" column="nick_name"/>
+        <result property="avatarUrl" column="avatar_url"/>
 
         <!-- 用料列表映射 -->
         <collection property="materialsList" ofType="com.zzmr.fgback.bean.Materials">
@@ -62,7 +63,8 @@
                rs.step_number,
                rs.img,
                rs.content,
-               u.nick_name
+               u.nick_name,
+               u.avatar_url
         FROM recipe r
                  LEFT JOIN materials m ON r.recipe_id = m.recipe_id
                  LEFT JOIN recipe_step rs ON r.recipe_id = rs.recipe_id

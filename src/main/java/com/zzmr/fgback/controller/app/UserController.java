@@ -10,6 +10,7 @@ import com.zzmr.fgback.properties.JwtProperties;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.UserService;
 import com.zzmr.fgback.util.JwtUtils;
+import com.zzmr.fgback.util.MinioUtils;
 import com.zzmr.fgback.vo.UserLoginVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +69,26 @@ public class UserController {
         return Result.success(userLoginVo);
     }
 
+    /**
+     * 更新用户信息
+     * 负责更新昵称，个人签名这两项
+     */
+    @ApiOperation("更新用户信息")
+    @PostMapping("/update")
+    public Result update(@RequestBody User user) {
+        userService.updateBasic(user);
+        return Result.success();
+    }
+
+    /**
+     * 更新用户头像
+     */
+    @ApiOperation("更新用户头像")
+    @PostMapping("/updateAvatar")
+    public Result updateAvatar(@RequestParam(name = "avatarImg") MultipartFile avatarImg) {
+        String newAvatarUrl = userService.updateAvatar(avatarImg);
+        return Result.success(newAvatarUrl);
+    }
 
     /**
      * 只保留邮箱登录，手机号登录删除

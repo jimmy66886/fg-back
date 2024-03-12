@@ -29,4 +29,7 @@ public class RecipeVo extends Recipe {
     // 昵称
     private String nickName;
 
+    // 头像
+    private String avatarUrl;
+
 }
