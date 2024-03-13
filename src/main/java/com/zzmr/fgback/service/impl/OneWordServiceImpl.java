@@ -33,7 +33,7 @@ public class OneWordServiceImpl extends ServiceImpl<OneWordMapper, OneWord> impl
         /**
          * 数据库中只有101条记录,写死就行了,后期也不会添加
          */
-        int i = random.nextInt(101 + 1);
+        int i = random.nextInt(101);
         OneWord oneWordCache = redisUtils.getJsonToBean("oneWord:" + i, OneWord.class);
         if (oneWordCache != null) {
             // 缓存中有数据

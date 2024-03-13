@@ -98,7 +98,11 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
 
     /**
      * 分页查询菜谱列表
-     * 有三种排序方式，默认是
+     * 有三种排序方式，默认是创建时间降序
+     * 可选点赞/收藏数量降序
+     *
+     * 这个接口没办法直接添加分类的搜索方法，思路是在Service中调用Category的查询方法，然后将结果用一个Set来去重整合
+     * 不太行，这个地方还要涉及到分页呢，整合到一块后还要处理分页的事情，不如直接改sql了
      *
      * @param recipeDto
      * @return

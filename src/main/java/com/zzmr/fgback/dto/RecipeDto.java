@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class RecipeDto {
 
-    @ApiModelProperty(value = "标题模糊搜索")
+    @ApiModelProperty(value = "标题/分类名模糊搜索")
     private String title;
 
     @ApiModelProperty(value = "菜谱id")

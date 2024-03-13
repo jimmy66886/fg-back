@@ -68,6 +68,14 @@ public class RecipeController {
         return Result.success(recipeBasicVos);
     }
 
+    /**
+     * 分页查询菜谱列表要大改
+     * 1. 搜索条件变成 标题+分类 的模糊搜索，也就是说，如果查询条件为早餐，那么就要把早餐这个分类下的菜谱以及标题中含有早餐的菜谱都给查出来
+     * 这个接口没办法直接添加分类的搜索方法，思路是在Service中调用Category的查询方法，然后将结果用一个Set来去重整合
+     *
+     * @param recipeDto
+     * @return
+     */
     @ApiOperation("分页查询菜谱列表")
     @PostMapping("/getList")
     public PageResult getRecipeList(@RequestBody RecipeDto recipeDto) {
