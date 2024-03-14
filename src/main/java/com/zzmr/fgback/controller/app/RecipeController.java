@@ -83,6 +83,13 @@ public class RecipeController {
         return pageResult;
     }
 
+    @ApiOperation("首页展示菜谱列表")
+    @PostMapping("/getNormalList")
+    public PageResult getNormalList(@RequestBody RecipeDto recipeDto){
+        PageResult pageResult = recipeService.getRecipeList(recipeDto);
+        return pageResult;
+    }
+
     /**
      * 涉及到菜谱步骤和用料的删除
      *

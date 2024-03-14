@@ -13,6 +13,7 @@ import com.zzmr.fgback.mapper.*;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.RecipeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzmr.fgback.service.SearchHistoryService;
 import com.zzmr.fgback.util.ContextUtils;
 import com.zzmr.fgback.util.RedisUtils;
 import com.zzmr.fgback.vo.RecipeBasicVo;
@@ -54,6 +55,9 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
 
     @Autowired
     private RedisUtils redisUtils;
+
+    @Autowired
+    private SearchHistoryService searchHistoryService;
 
     /**
      * 根据菜谱id查询菜谱以及菜谱对应用料
@@ -100,7 +104,7 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
      * 分页查询菜谱列表
      * 有三种排序方式，默认是创建时间降序
      * 可选点赞/收藏数量降序
-     *
+     * <p>
      * 这个接口没办法直接添加分类的搜索方法，思路是在Service中调用Category的查询方法，然后将结果用一个Set来去重整合
      * 不太行，这个地方还要涉及到分页呢，整合到一块后还要处理分页的事情，不如直接改sql了
      *
@@ -109,6 +113,11 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
      */
     @Override
     public PageResult getRecipeList(RecipeDto recipeDto) {
+        if (recipeDto.getTitle() != null) {
+            // 插入该历史记录
+            searchHistoryService.insert(recipeDto.getTitle());
+        }
+        // 下面是搜索正常逻辑
         if (StringUtils.isEmpty(recipeDto.getOrderBy())) {
             // 如果排序字段为空，那就是默认使用create_time降序排序
             recipeDto.setOrderBy(OrderConstant.DEFAULT);

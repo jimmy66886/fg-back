@@ -54,7 +54,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .addPathPatterns("/app/**")
                 .excludePathPatterns("/app/user/login")
                 .excludePathPatterns("/app/user/register")
-                .excludePathPatterns("/app/recipe/getList")
+                // 由于之前的getList涉及到用户搜索记录的插入，所以这里新加一个getNormalList，用于主页的菜谱展示
+                .excludePathPatterns("/app/recipe/getNormalList")
                 .excludePathPatterns("/app/recipe/test")
                 .excludePathPatterns("/app/user/getCode")
                 .excludePathPatterns("/app/recipe/getById")
