@@ -6,9 +6,11 @@ import com.zzmr.fgback.bean.Category;
 import com.zzmr.fgback.constant.OrderConstant;
 import com.zzmr.fgback.dto.PageCategoryDto;
 import com.zzmr.fgback.mapper.CategoryMapper;
+import com.zzmr.fgback.mapper.MainCategoryMapper;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.CategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzmr.fgback.vo.CategoryVo;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.StringUtil;
@@ -30,6 +32,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private MainCategoryMapper mainCategoryMapper;
 
     /**
      * 通过分类名分页查询分类的菜谱
@@ -57,5 +62,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public List<Category> getAll() {
         List<Category> list = categoryMapper.getAll();
         return list;
+    }
+
+    /**
+     * 获取大类，以及大类下的分类
+     *
+     * @return
+     */
+    @Override
+    public List<CategoryVo> getAllCategory() {
+        List<CategoryVo> categoryVoList = categoryMapper.getAllCategory();
+        return categoryVoList;
     }
 }

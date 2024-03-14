@@ -8,4 +8,8 @@
             (#{materials.recipeId},#{materials.name},#{materials.amount})
         </foreach>
     </insert>
+
+    <select id="getAll" resultType="com.zzmr.fgback.vo.MaterialsVo">
+        SELECT DISTINCT m.name FROM materials m;
+    </select>
 </mapper>

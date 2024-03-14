@@ -4,6 +4,7 @@ import com.zzmr.fgback.bean.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zzmr.fgback.dto.PageCategoryDto;
 import com.zzmr.fgback.result.PageResult;
+import com.zzmr.fgback.vo.CategoryVo;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 
 import java.util.List;
@@ -30,4 +31,10 @@ public interface CategoryService extends IService<Category> {
      * @return
      */
     List<Category> getAll();
+
+    /**
+     * 获取大类，以及大类下的分类
+     * @return
+     */
+    List<CategoryVo> getAllCategory();
 }

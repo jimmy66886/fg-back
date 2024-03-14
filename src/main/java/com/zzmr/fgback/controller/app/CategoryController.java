@@ -8,6 +8,7 @@ import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.CategoryService;
 import com.zzmr.fgback.util.RedisUtils;
+import com.zzmr.fgback.vo.CategoryVo;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,12 +48,21 @@ public class CategoryController {
         return Result.success(categoryList);
     }
 
+    @ApiOperation("获取大类，以及大类下的分类")
+    @GetMapping("/getAllCategory")
+    public Result getAllCategory() {
+        List<CategoryVo> categoryVoList = categoryService.getAllCategory();
+        return Result.success(categoryVoList);
+    }
+
     /**
      * 由于分类和菜谱是多对多的关系，所以一个分类在表中会有多个id，这就导致根据id实现不了查询的效果
+     * 这个接口弃用了，直接在菜谱的接口中实现了根据分类名查询菜谱
      *
      * @param pageCategoryDto
      * @return
      */
+    @Deprecated
     @PostMapping("/getRecipe")
     @ApiOperation("通过分类名分页查询分类的菜谱")
     public PageResult getRecipe(@RequestBody PageCategoryDto pageCategoryDto) {

@@ -17,7 +17,25 @@
     </select>
 
     <select id="getAll" resultType="com.zzmr.fgback.bean.Category">
-        select distinct name,img
+        select distinct name, img
         from category;
+    </select>
+
+    <resultMap id="categoryVoResultMap" type="com.zzmr.fgback.vo.CategoryVo">
+        <id property="mainCategoryId" column="main_category_id"></id>
+        <result property="name" column="main_name"></result>
+        <collection property="categoryList" ofType="com.zzmr.fgback.bean.Category">
+            <result property="name" column="name"></result>
+            <result property="img" column="img"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getAllCategory" resultMap="categoryVoResultMap">
+        SELECT distinct mc.main_category_id,
+                        mc.NAME main_name,
+                        c.name,
+                        c.img
+        FROM main_category mc
+                 LEFT JOIN category c ON c.main_category_id = mc.main_category_id
     </select>
 </mapper>
