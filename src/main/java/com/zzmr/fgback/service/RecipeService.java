@@ -35,7 +35,7 @@ public interface RecipeService extends IService<Recipe> {
      * @param materialsDtoList
      * @return
      */
-    List<RecipeBasicVo> getByMaterials(List<MaterialsDto> materialsDtoList);
+    // List<RecipeBasicVo> getByMaterials(List<MaterialsDto> materialsDtoList);
 
     /**
      * 分页查询菜谱列表
@@ -81,4 +81,10 @@ public interface RecipeService extends IService<Recipe> {
      */
     void writeCache();
 
+    /**
+     * 根据用料名称查询菜谱
+     * @param materialList
+     * @return
+     */
+    List<RecipeBasicVo> getByMaterialsByArr(List<String> materialList);
 }

@@ -89,7 +89,7 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
      * @param materialsDtoList
      * @return
      */
-    @Override
+    /*@Override
     public List<RecipeBasicVo> getByMaterials(List<MaterialsDto> materialsDtoList) {
 
         List<String> materialsNameList = new ArrayList<>();
@@ -97,6 +97,18 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
             materialsNameList.add(materialsDTO.getMaterialName());
         }
         List<RecipeBasicVo> recipeBasicVos = recipeMapper.getByMaterials(materialsNameList);
+        return recipeBasicVos;
+    }*/
+
+    /**
+     * 根据用料名称查询菜谱
+     *
+     * @param materialList
+     * @return
+     */
+    @Override
+    public List<RecipeBasicVo> getByMaterialsByArr(List<String> materialList) {
+        List<RecipeBasicVo> recipeBasicVos = recipeMapper.getByMaterials(materialList);
         return recipeBasicVos;
     }
 

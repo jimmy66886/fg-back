@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * @author zzmr
  * @create 2024-01-31 15:38
@@ -28,5 +30,9 @@ public class UserLoginVo {
     private String openid;
 
     private String avatarUrl;
+
+    private LocalDateTime createTime;
+
+    private String bio;
 
 }

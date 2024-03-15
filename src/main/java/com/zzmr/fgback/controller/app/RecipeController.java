@@ -61,10 +61,17 @@ public class RecipeController {
         return Result.success(recipeVo);
     }
 
-    @ApiOperation("根据用料名称查询菜谱")
+   /* @ApiOperation("根据用料名称查询菜谱")
     @PostMapping("/getByMaterials")
     public Result getByMaterials(@RequestBody List<MaterialsDto> materialsDtoList) {
         List<RecipeBasicVo> recipeBasicVos = recipeService.getByMaterials(materialsDtoList);
+        return Result.success(recipeBasicVos);
+    }*/
+
+    @ApiOperation("根据用料名称查询菜谱")
+    @PostMapping("/getByMaterials")
+    public Result getByMaterialsByArr(@RequestBody List<String> materialList) {
+        List<RecipeBasicVo> recipeBasicVos = recipeService.getByMaterialsByArr(materialList);
         return Result.success(recipeBasicVos);
     }
 
@@ -85,7 +92,7 @@ public class RecipeController {
 
     @ApiOperation("首页展示菜谱列表")
     @PostMapping("/getNormalList")
-    public PageResult getNormalList(@RequestBody RecipeDto recipeDto){
+    public PageResult getNormalList(@RequestBody RecipeDto recipeDto) {
         PageResult pageResult = recipeService.getRecipeList(recipeDto);
         return pageResult;
     }
