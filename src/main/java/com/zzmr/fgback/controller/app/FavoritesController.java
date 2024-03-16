@@ -60,5 +60,12 @@ public class FavoritesController {
         return Result.success(recipeBasicVoList);
     }
 
+    @GetMapping("/getFavoritesInfo")
+    @ApiOperation("根据收藏夹id获取收藏夹信息")
+    public Result getFavoritesInfo(@RequestParam Long favoritesId) {
+        Favorites favorites = favoritesService.getFavoritesInfo(favoritesId);
+        return Result.success(favorites);
+    }
+
 }
 

@@ -193,6 +193,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
+     * 获取用户信息
+     *
+     * @return
+     */
+    @Override
+    public User get() {
+        Long userId = ContextUtils.getCurrentId();
+        return userMapper.selectById(userId);
+    }
+
+    /**
      * 将根据userLoginDTO获取openId的片段抽取成一个方法
      *
      * @return

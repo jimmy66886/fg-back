@@ -35,4 +35,11 @@ public interface FavoritesService extends IService<Favorites> {
      * @return
      */
     List<RecipeBasicVo> getRecipeList(Long favoritesId);
+
+    /**
+     * 根据收藏夹id获取收藏夹信息
+     * @param favoritesId
+     * @return
+     */
+    Favorites getFavoritesInfo(Long favoritesId);
 }

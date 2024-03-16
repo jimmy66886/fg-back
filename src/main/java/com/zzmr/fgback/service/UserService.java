@@ -61,4 +61,10 @@ public interface UserService extends IService<User> {
      * @return
      */
     String updateAvatar(MultipartFile avatarImg);
+
+    /**
+     * 获取用户信息
+     * @return
+     */
+    User get();
 }

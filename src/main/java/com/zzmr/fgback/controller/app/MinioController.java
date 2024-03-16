@@ -3,6 +3,7 @@ package com.zzmr.fgback.controller.app;
 import com.zzmr.fgback.exception.BaseException;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.util.MinioUtils;
+import com.zzmr.fgback.vo.FileVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,9 @@ public class MinioController {
             throw new BaseException("文件为空！");
         }
         String imgUrl = minioUtils.upload(file);
-        return Result.success(imgUrl);
+        FileVo fileVo = new FileVo();
+        fileVo.setFileUrl(imgUrl);
+        return Result.success(fileVo);
     }
 
 }

@@ -70,6 +70,16 @@ public class UserController {
     }
 
     /**
+     * 获取用户信息
+     */
+    @ApiOperation("获取用户信息")
+    @GetMapping("/get")
+    public Result get(){
+        User user = userService.get();
+        return Result.success(user);
+    }
+
+    /**
      * 更新用户信息
      * 负责更新昵称，个人签名这两项
      */

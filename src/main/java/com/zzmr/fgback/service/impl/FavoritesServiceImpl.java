@@ -62,7 +62,8 @@ public class FavoritesServiceImpl extends ServiceImpl<FavoritesMapper, Favorites
         }
 
         // 最后添加用户的默认收藏夹
-        List<FavoriteVo> favorites = favoriteMapper.getFavoriteVo(userId);
+        // 分开全部收藏和收藏夹
+        /*List<FavoriteVo> favorites = favoriteMapper.getFavoriteVo(userId);
         if (favorites.size() == 0) {
             throw new BaseException("暂无收藏菜谱，快去首页逛逛吧");
         }
@@ -71,7 +72,7 @@ public class FavoritesServiceImpl extends ServiceImpl<FavoritesMapper, Favorites
         favoritesVo.setNumber(favorites.size());
         favoritesVo.setCoverImg(favorites.get(0).getCoverImg());
 
-        favoritesVoList.add(favoritesVo);
+        favoritesVoList.add(favoritesVo);*/
         return favoritesVoList;
     }
 
@@ -89,6 +90,7 @@ public class FavoritesServiceImpl extends ServiceImpl<FavoritesMapper, Favorites
 
     /**
      * 获取收藏夹的菜谱列表
+     *
      * @param favoritesId
      * @return
      */
@@ -97,6 +99,11 @@ public class FavoritesServiceImpl extends ServiceImpl<FavoritesMapper, Favorites
         Favorite favorite = new Favorite();
         favorite.setFavoritesId(favoritesId);
         return favoritesMapper.getRecipeList(favorite);
+    }
+
+    @Override
+    public Favorites getFavoritesInfo(Long favoritesId) {
+        return favoritesMapper.selectById(favoritesId);
     }
 
 }
