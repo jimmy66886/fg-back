@@ -87,4 +87,10 @@ public interface RecipeService extends IService<Recipe> {
      * @return
      */
     List<RecipeBasicVo> getByMaterialsByArr(List<String> materialList);
+
+    /**
+     * 查询用户所有的菜谱
+     * @return
+     */
+    List<RecipeBasicVo> getByUserId();
 }

@@ -124,6 +124,28 @@
         </where>
     </select>
 
+    <!--  只根据用户id查  -->
+    <select id="getRecipeListByUserId" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
+        select r.recipe_id,
+               r.title,
+               r.intro,
+               r.author_id,
+               r.image_url,
+               r.create_time,
+               r.update_time,
+               r.views,
+               u.nick_name,
+               (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe')
+                   AS like_number,
+               (SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id)
+                   AS favorite_number
+        from recipe r
+                 left join user u on r.author_id = u.user_id
+        where u.user_id = #{userId}
+        order by r.create_time DESC
+    </select>
+
+
     <select id="getViews" resultType="com.zzmr.fgback.vo.RecipeViews">
         SELECT recipe_id, views
         FROM recipe

@@ -48,6 +48,8 @@ public interface RecipeMapper extends BaseMapper<Recipe> {
      */
     Page<RecipeBasicVo> getRecipeList(@Param("title") String title);
 
+    List<RecipeBasicVo> getRecipeListByUserId(@Param("userId") Long userId);
+
     /**
      * 插入一条，并返回主键
      *

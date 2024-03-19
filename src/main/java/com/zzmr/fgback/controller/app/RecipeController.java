@@ -90,6 +90,13 @@ public class RecipeController {
         return pageResult;
     }
 
+    @ApiOperation("查询用户所有的菜谱")
+    @GetMapping("/getByUserId")
+    public Result getRecipeListByUser() {
+        List<RecipeBasicVo> recipeBasicVos = recipeService.getByUserId();
+        return Result.success(recipeBasicVos);
+    }
+
     @ApiOperation("首页展示菜谱列表")
     @PostMapping("/getNormalList")
     public PageResult getNormalList(@RequestBody RecipeDto recipeDto) {

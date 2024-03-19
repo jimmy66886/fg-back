@@ -113,6 +113,17 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
     }
 
     /**
+     * 查询用户所有的菜谱
+     *
+     * @return
+     */
+    @Override
+    public List<RecipeBasicVo> getByUserId() {
+        Long userId = ContextUtils.getCurrentId();
+        return recipeMapper.getRecipeListByUserId(userId);
+    }
+
+    /**
      * 分页查询菜谱列表
      * 有三种排序方式，默认是创建时间降序
      * 可选点赞/收藏数量降序
