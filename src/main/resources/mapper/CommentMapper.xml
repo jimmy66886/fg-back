@@ -12,15 +12,18 @@
         <result column="receiver_avatar_url" property="receiverAvatarUrl"/>
         <result column="content" property="content"/>
         <result column="create_time" property="sendDateTime"/>
+        <result column="reply_number" property="replyNumber"/>
     </resultMap>
 
     <select id="getTop" resultMap="CommentVoResultMap">
         SELECT c.*,
                (SELECT u.nick_name FROM `user` u WHERE u.user_id = c.user_id)  AS sender_name,
-               (SELECT u.avatar_url FROM `user` u WHERE u.user_id = c.user_id) AS sender_avatar_url
+               (SELECT u.avatar_url FROM `user` u WHERE u.user_id = c.user_id) AS sender_avatar_url,
+               (SELECT COUNT(*) FROM COMMENT WHERE root_id = c.comment_id)     AS reply_number
         FROM `comment` c
         WHERE c.recipe_id = #{commentDto.recipeId}
           AND c.root_id IS NULL
+        order by c.create_time DESC
     </select>
 
     <select id="getByTopComment" resultMap="CommentVoResultMap">

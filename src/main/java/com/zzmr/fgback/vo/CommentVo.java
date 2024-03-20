@@ -45,4 +45,7 @@ public class CommentVo {
     // 发送时间
     private LocalDateTime sendDateTime;
 
+    // 顶级评论下的二级评论数
+    private Integer replyNumber;
+
 }

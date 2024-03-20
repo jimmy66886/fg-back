@@ -3,6 +3,7 @@ package com.zzmr.fgback.controller.app;
 
 import com.zzmr.fgback.bean.Comment;
 import com.zzmr.fgback.dto.CommentDto;
+import com.zzmr.fgback.dto.DeleteCommentDto;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.CommentService;
@@ -53,9 +54,9 @@ public class CommentController {
 
     @ApiOperation("删除评论")
     @PostMapping("/delete")
-    public Result delete(@RequestParam("commentId") Long commentId) {
-        commentService.delete(commentId);
-        return Result.success(commentId);
+    public Result delete(@RequestBody DeleteCommentDto dto) {
+        commentService.delete(dto.getCommentId());
+        return Result.success();
     }
 
 }
