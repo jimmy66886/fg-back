@@ -39,5 +39,6 @@
                  LEFT JOIN user r ON c.to_id = r.user_id
         WHERE c.recipe_id = #{commentDto.recipeId}
           AND c.root_id = #{commentDto.rootId}
+        order by c.create_time DESC
     </select>
 </mapper>
