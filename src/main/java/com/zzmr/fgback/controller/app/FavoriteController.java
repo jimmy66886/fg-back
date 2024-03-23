@@ -46,8 +46,8 @@ public class FavoriteController {
 
     @PostMapping("/delete")
     @ApiOperation("删除一个菜谱收藏")
-    public Result delete(Long recipeId) {
-        favoriteService.delete(recipeId);
+    public Result delete(@RequestBody Favorite favorite) {
+        favoriteService.delete(favorite.getRecipeId());
         return Result.success();
     }
 
@@ -76,6 +76,10 @@ public class FavoriteController {
      * 这时只需要根据 菜谱id和用户id 以及 收藏夹id favoritesId
      * 将这条记录的favoritesId 修改为指定的收藏夹id即可
      * 限定条件：一个菜谱只能收藏进一个自定义收藏夹
+     *
+     *
+     * 上面的思路改成以下：
+     * 用户可以直接将菜谱收藏至自定义收藏夹中，不需要将菜谱先收藏至全部收藏再修改记录
      *
      * @return
      */

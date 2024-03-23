@@ -102,6 +102,7 @@ public class FavoriteServiceImpl extends ServiceImpl<FavoriteMapper, Favorite> i
     @Override
     public void addTo(Favorite favorite) {
         favorite.setUserId(ContextUtils.getCurrentId());
-        favoriteMapper.updateOne(favorite);
+        // 传进来的有收藏夹id和菜谱id
+        favoriteMapper.insert(favorite);
     }
 }

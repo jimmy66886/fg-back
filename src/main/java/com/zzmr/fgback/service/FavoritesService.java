@@ -27,7 +27,7 @@ public interface FavoritesService extends IService<Favorites> {
      * 添加一个收藏夹
      * @param favorites
      */
-    void insert(Favorites favorites);
+    Long insert(Favorites favorites);
 
     /**
      * 获取收藏夹的菜谱列表

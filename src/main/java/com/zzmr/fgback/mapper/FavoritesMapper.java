@@ -43,4 +43,10 @@ public interface FavoritesMapper extends BaseMapper<Favorites> {
      * @return
      */
     List<RecipeBasicVo> getRecipeList(@Param("favorite") Favorite favorite);
+
+    /**
+     * 插入并返回主键
+     * @param favorites
+     */
+    void insertOne(@Param("favorites") Favorites favorites);
 }

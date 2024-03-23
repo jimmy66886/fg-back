@@ -42,8 +42,8 @@ public class FavoritesController {
     @PostMapping("/insert")
     @ApiOperation("添加一个收藏夹")
     public Result insert(@RequestBody Favorites favorites) {
-        favoritesService.insert(favorites);
-        return Result.success();
+        Long id = favoritesService.insert(favorites);
+        return Result.success(id);
     }
 
     @PostMapping("/update")

@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzmr.fgback.mapper.FavoritesMapper">
 
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="favoritesId">
+        insert into favorites(user_id, name, intro)
+        VALUES (#{favorites.userId},#{favorites.name},#{favorites.intro})
+    </insert>
+
     <select id="getAllFavorites" resultType="com.zzmr.fgback.vo.FavoritesVo">
         SELECT fs.*,
                (SELECT count(*) FROM favorite f WHERE f.favorites_id = fs.favorites_id) as number

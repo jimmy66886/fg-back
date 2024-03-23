@@ -83,9 +83,10 @@ public class FavoritesServiceImpl extends ServiceImpl<FavoritesMapper, Favorites
      * @param favorites
      */
     @Override
-    public void insert(Favorites favorites) {
+    public Long insert(Favorites favorites) {
         favorites.setUserId(ContextUtils.getCurrentId());
-        favoritesMapper.insert(favorites);
+        favoritesMapper.insertOne(favorites);
+        return favorites.getFavoritesId();
     }
 
     /**
