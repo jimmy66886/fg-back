@@ -65,4 +65,31 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
             return Boolean.FALSE;
         }
     }
+
+    /**
+     * 删除点赞记录
+     * 这个方法可以删除评论点赞和菜谱点赞，所以要根据前端传来的id来判断是什么类型的点赞
+     *
+     * @param addLikeDto
+     */
+    @Override
+    public void delete(AddLikeDto addLikeDto) {
+        String contentType = "";
+        Long contentId = null;
+        if (addLikeDto.getRecipeId() != null) {
+            // 取消菜谱点赞
+            contentType = "recipe";
+            contentId = addLikeDto.getRecipeId();
+        }
+        if (addLikeDto.getCommentId() != null) {
+            // 取消评论点赞
+            contentType = "comment";
+            contentId = addLikeDto.getCommentId();
+        }
+        likesMapper.delete(new LambdaQueryWrapper<Likes>()
+                .eq(Likes::getContentType, contentType)
+                .eq(Likes::getUserId, ContextUtils.getCurrentId())
+                .eq(Likes::getContentId, contentId)
+        );
+    }
 }

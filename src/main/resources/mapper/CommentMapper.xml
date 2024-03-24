@@ -13,32 +13,42 @@
         <result column="content" property="content"/>
         <result column="create_time" property="sendDateTime"/>
         <result column="reply_number" property="replyNumber"/>
+        <result column="is_liked" property="isLiked"></result>
+        <result column="like_count" property="likeCount"></result>
     </resultMap>
 
     <select id="getTop" resultMap="CommentVoResultMap">
         SELECT c.*,
                (SELECT u.nick_name FROM `user` u WHERE u.user_id = c.user_id)  AS sender_name,
                (SELECT u.avatar_url FROM `user` u WHERE u.user_id = c.user_id) AS sender_avatar_url,
-               (SELECT COUNT(*) FROM COMMENT WHERE root_id = c.comment_id)     AS reply_number
+               (SELECT COUNT(*) FROM COMMENT WHERE root_id = c.comment_id)     AS reply_number,
+               (SELECT COUNT(*) FROM likes WHERE content_id = c.comment_id AND content_type = 'comment') AS like_count,
+               CASE WHEN l.user_id IS NOT NULL THEN 1 ELSE 0 END               AS is_liked
         FROM `comment` c
+                 LEFT JOIN `likes` l ON c.comment_id = l.content_id AND l.content_type = 'comment' AND
+                                        l.user_id = #{commentDto.userId}
         WHERE c.recipe_id = #{commentDto.recipeId}
           AND c.root_id IS NULL
-        order by c.create_time DESC
+        ORDER BY c.create_time DESC
     </select>
 
     <select id="getByTopComment" resultMap="CommentVoResultMap">
         SELECT c.*,
-               s.nick_name  AS sender_name,
-               s.avatar_url AS sender_avatar_url,
-               s.user_id    AS sender_id,
-               r.nick_name  AS receiver_name,
-               r.avatar_url AS receiver_avatar_url,
-               r.user_id    AS receiver_id
+               s.nick_name                                                                               AS sender_name,
+               s.avatar_url                                                                              AS sender_avatar_url,
+               s.user_id                                                                                 AS sender_id,
+               r.nick_name                                                                               AS receiver_name,
+               r.avatar_url                                                                              AS receiver_avatar_url,
+               r.user_id                                                                                 AS receiver_id,
+               (SELECT COUNT(*) FROM likes WHERE content_id = c.comment_id AND content_type = 'comment') AS like_count,
+               CASE WHEN l.user_id IS NOT NULL THEN 1 ELSE 0 END                                         AS is_liked
         FROM comment c
                  LEFT JOIN user s ON c.user_id = s.user_id
                  LEFT JOIN user r ON c.to_id = r.user_id
+                 LEFT JOIN likes l ON c.comment_id = l.content_id AND l.content_type = 'comment' AND
+                                      l.user_id = #{commentDto.userId}
         WHERE c.recipe_id = #{commentDto.recipeId}
           AND c.root_id = #{commentDto.rootId}
-        order by c.create_time DESC
+        ORDER BY c.create_time DESC
     </select>
 </mapper>

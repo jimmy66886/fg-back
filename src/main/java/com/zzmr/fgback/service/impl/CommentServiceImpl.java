@@ -39,6 +39,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public PageResult getByRecipeId(CommentDto commentDto) {
         // 开启分页
         PageHelper.startPage(commentDto.getPage(), commentDto.getPageSize());
+        commentDto.setUserId(ContextUtils.getCurrentId());
         Page<CommentVo> page = commentMapper.getTop(commentDto);
         return new PageResult(page.getTotal(), page.getResult());
     }
@@ -52,6 +53,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public PageResult getByTopComment(CommentDto commentDto) {
         PageHelper.startPage(commentDto.getPage(), commentDto.getPageSize());
+        commentDto.setUserId(ContextUtils.getCurrentId());
         Page<CommentVo> page = commentMapper.getByTopComment(commentDto);
         return new PageResult(page.getTotal(), page.getResult());
     }

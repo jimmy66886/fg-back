@@ -31,6 +31,13 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * 应该是在查询菜谱中的评论时,就将那条评论是否点过赞给封装到单条评论中
+     * 1. 首先是顶级评论,在返回顶级评论时,返回结果中应包含该条评论是否点过赞
+     *
+     * @param commentDto
+     * @return
+     */
     @ApiOperation("根据菜谱id分页查询菜谱的顶级评论")
     @PostMapping("/getByRecipeId")
     public PageResult getByRecipeId(@RequestBody CommentDto commentDto) {

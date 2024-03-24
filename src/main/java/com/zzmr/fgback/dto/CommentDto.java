@@ -22,4 +22,7 @@ public class CommentDto {
     @ApiModelProperty(value = "页面大小")
     private Integer pageSize;
 
+    @ApiModelProperty(value = "用户id")
+    private Long userId;
+
 }

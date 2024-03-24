@@ -48,4 +48,10 @@ public class CommentVo {
     // 顶级评论下的二级评论数
     private Integer replyNumber;
 
+    // 是否点过赞
+    private Boolean isLiked;
+
+    // 获赞数
+    private Integer likeCount;
+
 }

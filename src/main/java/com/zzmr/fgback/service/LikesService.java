@@ -6,7 +6,7 @@ import com.zzmr.fgback.dto.AddLikeDto;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author zzmr
@@ -16,14 +16,23 @@ public interface LikesService extends IService<Likes> {
 
     /**
      * 新增点赞
+     *
      * @param addLikeDto
      */
     void addLikes(AddLikeDto addLikeDto);
 
     /**
      * 查询用户是否点赞过菜谱
+     *
      * @param recipeId
      * @return
      */
     Boolean getLiked(Long recipeId);
+
+    /**
+     * 取消点赞
+     *
+     * @param addLikeDto
+     */
+    void delete(AddLikeDto addLikeDto);
 }

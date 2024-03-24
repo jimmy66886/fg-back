@@ -39,5 +39,13 @@ public class LikesController {
         Boolean isLiked = likesService.getLiked(recipeId);
         return Result.success(isLiked);
     }
+
+    @ApiOperation("取消点赞")
+    @PostMapping("/delete")
+    public Result delete(@RequestBody AddLikeDto addLikeDto) {
+        likesService.delete(addLikeDto);
+        return Result.success();
+    }
+
 }
 
