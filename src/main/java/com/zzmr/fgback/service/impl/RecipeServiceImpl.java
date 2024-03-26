@@ -118,8 +118,11 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
      * @return
      */
     @Override
-    public List<RecipeBasicVo> getByUserId() {
-        Long userId = ContextUtils.getCurrentId();
+    public List<RecipeBasicVo> getByUserId(Long userId) {
+        // 如果传来的用户id为空，则表示查询的是用户自己的菜谱列表，反之则查询的是他人的菜谱列表
+        if (userId == -1) {
+            userId = ContextUtils.getCurrentId();
+        }
         return recipeMapper.getRecipeListByUserId(userId);
     }
 

@@ -92,8 +92,8 @@ public class RecipeController {
 
     @ApiOperation("查询用户所有的菜谱")
     @GetMapping("/getByUserId")
-    public Result getRecipeListByUser() {
-        List<RecipeBasicVo> recipeBasicVos = recipeService.getByUserId();
+    public Result getRecipeListByUser(@RequestParam Long userId) {
+        List<RecipeBasicVo> recipeBasicVos = recipeService.getByUserId(userId);
         return Result.success(recipeBasicVos);
     }
 

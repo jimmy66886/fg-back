@@ -74,8 +74,18 @@ public class UserController {
      */
     @ApiOperation("获取用户信息")
     @GetMapping("/get")
-    public Result get(){
+    public Result get() {
         User user = userService.get();
+        return Result.success(user);
+    }
+
+    /**
+     * 根据用户id获取用户信息
+     */
+    @ApiOperation("根据用户id获取用户信息")
+    @GetMapping("/getById")
+    public Result getById(@RequestParam Long userId) {
+        User user = userService.getById(userId);
         return Result.success(user);
     }
 

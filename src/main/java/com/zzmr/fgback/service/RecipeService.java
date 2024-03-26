@@ -92,5 +92,5 @@ public interface RecipeService extends IService<Recipe> {
      * 查询用户所有的菜谱
      * @return
      */
-    List<RecipeBasicVo> getByUserId();
+    List<RecipeBasicVo> getByUserId(Long userId);
 }
