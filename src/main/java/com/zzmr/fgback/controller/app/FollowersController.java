@@ -47,18 +47,24 @@ public class FollowersController {
 
     @ApiOperation("查看关注列表")
     @GetMapping("/getList")
-    public Result getList() {
-        List<FollowersVo> followersVoList = followersService.getList();
+    public Result getList(@RequestParam Long userId) {
+        List<FollowersVo> followersVoList = followersService.getList(userId);
         return Result.success(followersVoList);
     }
 
     @ApiOperation("查看粉丝")
     @GetMapping("/getFans")
-    public Result getFans() {
-        List<FollowersVo> fans = followersService.getFans();
+    public Result getFans(@RequestParam Long userId) {
+        List<FollowersVo> fans = followersService.getFans(userId);
         return Result.success(fans);
     }
 
+    @ApiOperation("查看是否关注该菜谱作者")
+    @GetMapping("/getFollowed")
+    public Result getFollowed(@RequestParam Long authorId) {
+        Boolean isFollowed = followersService.getFollowed(authorId);
+        return Result.success(isFollowed);
+    }
 
 
 }

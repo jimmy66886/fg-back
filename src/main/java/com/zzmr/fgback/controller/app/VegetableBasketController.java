@@ -55,7 +55,7 @@ public class VegetableBasketController {
 
     @ApiOperation("删除菜篮子")
     @PostMapping("/delete")
-    public Result delete(@RequestParam("basketId") Long basketId) {
+    public Result delete(@RequestBody Long basketId) {
         vegetableBasketService.delete(basketId);
         return Result.success();
     }
@@ -63,6 +63,7 @@ public class VegetableBasketController {
     /**
      * 这个就没什么说的了，在查询时无论是根据菜谱添加的菜篮子还是自定义的菜篮子，在前端都是同样的数据
      * 修改时当成一样的就行了
+     *
      * @param addVegeBasketDto
      * @return
      */

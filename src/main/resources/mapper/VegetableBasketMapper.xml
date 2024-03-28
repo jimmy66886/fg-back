@@ -27,5 +27,6 @@
         FROM vegetable_basket vb
                  LEFT JOIN basket_material bm ON vb.basket_id = bm.basket_id
         WHERE vb.user_id = #{userId}
+        order by vb.create_time DESC
     </select>
 </mapper>

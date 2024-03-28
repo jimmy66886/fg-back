@@ -35,11 +35,18 @@ public interface FollowersService extends IService<Followers> {
      * 查看关注列表
      * @return
      */
-    List<FollowersVo> getList();
+    List<FollowersVo> getList(Long userId);
 
     /**
      * 获取粉丝列表
      * @return
      */
-    List<FollowersVo> getFans();
+    List<FollowersVo> getFans(Long userId);
+
+    /**
+     * 查询用户是否关注菜谱作者
+     * @param authorId
+     * @return
+     */
+    Boolean getFollowed(Long authorId);
 }

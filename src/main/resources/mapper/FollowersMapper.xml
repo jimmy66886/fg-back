@@ -9,7 +9,6 @@
     </select>
 
     <select id="getFans" resultType="com.zzmr.fgback.vo.FollowersVo">
-        -- 粉丝列表
         SELECT u.avatar_url, u.nick_name, u.user_id
         FROM followers f
                  LEFT JOIN `user` u ON f.follower_id = u.user_id

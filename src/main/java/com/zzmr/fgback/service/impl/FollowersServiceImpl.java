@@ -61,11 +61,12 @@ public class FollowersServiceImpl extends ServiceImpl<FollowersMapper, Followers
      * @return
      */
     @Override
-    public List<FollowersVo> getList() {
-
-        // 先获取到当前用户id
-        Long currentId = ContextUtils.getCurrentId();
-        List<FollowersVo> followersVoList = followersMapper.getList(currentId);
+    public List<FollowersVo> getList(Long userId) {
+        if (userId == -1) {
+            // 先获取到当前用户id
+            userId = ContextUtils.getCurrentId();
+        }
+        List<FollowersVo> followersVoList = followersMapper.getList(userId);
         return followersVoList;
     }
 
@@ -75,9 +76,26 @@ public class FollowersServiceImpl extends ServiceImpl<FollowersMapper, Followers
      * @return
      */
     @Override
-    public List<FollowersVo> getFans() {
-        Long currentId = ContextUtils.getCurrentId();
-        List<FollowersVo> fans = followersMapper.getFans(currentId);
+    public List<FollowersVo> getFans(Long userId) {
+        if (userId == -1) {
+            userId = ContextUtils.getCurrentId();
+        }
+        List<FollowersVo> fans = followersMapper.getFans(userId);
         return fans;
+    }
+
+    /**
+     * 查询用户是否关注菜谱作者
+     *
+     * @param authorId
+     * @return
+     */
+    @Override
+    public Boolean getFollowed(Long authorId) {
+        Long userId = ContextUtils.getCurrentId();
+        Followers followers = followersMapper.selectOne(new LambdaQueryWrapper<Followers>()
+                .eq(Followers::getFollowerId, userId)
+                .eq(Followers::getFollowingId, authorId));
+        return followers != null;
     }
 }
