@@ -9,9 +9,15 @@
     </select>
 
     <select id="getFans" resultType="com.zzmr.fgback.vo.FollowersVo">
-        SELECT u.avatar_url, u.nick_name, u.user_id
-        FROM followers f
-                 LEFT JOIN `user` u ON f.follower_id = u.user_id
-        WHERE f.following_id = #{followingId}
+        SELECT
+            u.user_id,
+            u.nick_name,
+            u.avatar_url,
+            (SELECT COUNT(*) FROM followers WHERE follower_id = 1 AND following_id = u.user_id) AS isFollowed
+        FROM
+            followers f
+                LEFT JOIN `user` u ON f.follower_id = u.user_id
+        WHERE
+            f.following_id = #{followingId}
     </select>
 </mapper>

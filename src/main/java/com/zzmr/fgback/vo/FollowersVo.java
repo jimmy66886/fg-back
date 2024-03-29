@@ -16,4 +16,6 @@ public class FollowersVo {
 
     private String nickName;
 
+    private Boolean isFollowed;
+
 }

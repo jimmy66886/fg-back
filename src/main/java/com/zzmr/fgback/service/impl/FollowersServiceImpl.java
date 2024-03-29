@@ -67,6 +67,7 @@ public class FollowersServiceImpl extends ServiceImpl<FollowersMapper, Followers
             userId = ContextUtils.getCurrentId();
         }
         List<FollowersVo> followersVoList = followersMapper.getList(userId);
+        followersVoList.forEach(item -> item.setIsFollowed(true));
         return followersVoList;
     }
 
