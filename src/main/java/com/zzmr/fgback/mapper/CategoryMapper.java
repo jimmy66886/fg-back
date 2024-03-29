@@ -41,4 +41,11 @@ public interface CategoryMapper extends BaseMapper<Category> {
      * @return
      */
     List<CategoryVo> getAllCategory();
+
+    /**
+     * 批量插入分类
+     *
+     * @param categoryList
+     */
+    void insertBatch(@Param("categoryList") List<Category> categoryList);
 }

@@ -59,6 +59,9 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
     @Autowired
     private SearchHistoryService searchHistoryService;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
     /**
      * 根据菜谱id查询菜谱以及菜谱对应用料
      *
@@ -219,6 +222,11 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
                 .eq(RecipeStep::getRecipeId, recipe.getRecipeId()));
         materialsMapper.delete(new LambdaQueryWrapper<Materials>()
                 .eq(Materials::getRecipeId, recipe.getRecipeId()));
+
+        // 把分类也删除
+        categoryMapper.delete(new LambdaQueryWrapper<Category>()
+                .eq(Category::getRecipeId, recipe.getRecipeId()));
+
         // 重新插入
         insertOthers(addRecipeDto, recipe);
     }
@@ -236,6 +244,15 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
         List<RecipeStep> recipeStepList = addRecipeDto.getRecipeStepList();
         materialsList.forEach(materials -> materials.setRecipeId(recipeId));
         recipeStepList.forEach(recipeStep -> recipeStep.setRecipeId(recipeId));
+
+        if (!addRecipeDto.getCategoryList().isEmpty()) {
+            List<Category> categoryList = new ArrayList<>();
+            addRecipeDto.getCategoryList().forEach(
+                    categoryName -> categoryList.add(Category.builder().recipeId(recipeId).name(categoryName).build()));
+            // 还要插入分类,分类需要菜谱id和分类名
+            categoryMapper.insertBatch(categoryList);
+        }
+
         materialsMapper.insertBatch(materialsList);
         recipeStepMapper.insertBatch(recipeStepList);
     }

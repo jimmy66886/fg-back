@@ -37,4 +37,11 @@ public interface CategoryService extends IService<Category> {
      * @return
      */
     List<CategoryVo> getAllCategory();
+
+    /**
+     * 根据菜谱id获取菜谱的分类集合
+     * @param recipeId
+     * @return
+     */
+    List<Category> getByRecipeId(Long recipeId);
 }

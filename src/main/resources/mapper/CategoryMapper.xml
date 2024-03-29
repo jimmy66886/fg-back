@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzmr.fgback.mapper.CategoryMapper">
 
+    <insert id="insertBatch">
+        insert into category(recipe_id, name) values
+        <foreach collection="categoryList" item="category" separator=",">
+            (#{category.recipeId},#{category.name})
+        </foreach>
+    </insert>
+
     <select id="getRecipeList" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
         SELECT r.*,
                u.nick_name,

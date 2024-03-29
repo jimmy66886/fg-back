@@ -22,4 +22,7 @@ public class AddRecipeDto extends Recipe {
     @ApiModelProperty(value = "菜谱用料集合")
     private List<Materials> materialsList;
 
+    @ApiModelProperty(value = "分类名集合")
+    private List<String> categoryList;
+
 }

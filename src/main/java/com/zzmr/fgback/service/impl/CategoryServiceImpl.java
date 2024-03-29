@@ -1,5 +1,6 @@
 package com.zzmr.fgback.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zzmr.fgback.bean.Category;
@@ -73,5 +74,18 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     public List<CategoryVo> getAllCategory() {
         List<CategoryVo> categoryVoList = categoryMapper.getAllCategory();
         return categoryVoList;
+    }
+
+    /**
+     * 根据菜谱id获取菜谱的分类集合
+     *
+     * @param recipeId
+     * @return
+     */
+    @Override
+    public List<Category> getByRecipeId(Long recipeId) {
+        List<Category> categoryList =
+                categoryMapper.selectList(new LambdaQueryWrapper<Category>().eq(Category::getRecipeId, recipeId));
+        return categoryList;
     }
 }

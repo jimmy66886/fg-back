@@ -101,7 +101,7 @@
 
     <!--  没问题，左连接了一个category,然后查询条件里加上了or  -->
     <select id="getRecipeList" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
-        select r.recipe_id,
+        select DISTINCT r.recipe_id,
         r.title,
         r.intro,
         r.author_id,

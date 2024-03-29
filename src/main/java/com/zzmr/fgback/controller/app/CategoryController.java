@@ -71,5 +71,12 @@ public class CategoryController {
         return pageResult;
     }
 
+    @ApiOperation("根据菜谱id获取菜谱的分类集合")
+    @GetMapping("/getByRecipeId")
+    public Result getByRecipeId(@RequestParam Long recipeId) {
+        List<Category> categoryList = categoryService.getByRecipeId(recipeId);
+        return Result.success(categoryList);
+    }
+
 }
 
