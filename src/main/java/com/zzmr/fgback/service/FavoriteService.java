@@ -51,7 +51,15 @@ public interface FavoriteService extends IService<Favorite> {
 
     /**
      * 添加到指定自定义收藏夹
+     *
      * @param favorite
      */
     void addTo(Favorite favorite);
+
+    /**
+     * 根据菜谱ids删除菜谱收藏
+     *
+     * @param recipeIds
+     */
+    void deleteBatch(List<Long> recipeIds);
 }

@@ -105,4 +105,18 @@ public class FavoriteServiceImpl extends ServiceImpl<FavoriteMapper, Favorite> i
         // 传进来的有收藏夹id和菜谱id
         favoriteMapper.insert(favorite);
     }
+
+    /**
+     * 根据菜谱ids删除菜谱收藏
+     *
+     * @param recipeIds
+     */
+    @Override
+    public void deleteBatch(List<Long> recipeIds) {
+        Long userId = ContextUtils.getCurrentId();
+        favoriteMapper.delete(new LambdaQueryWrapper<Favorite>()
+                .eq(Favorite::getUserId, userId)
+                .in(Favorite::getRecipeId, recipeIds)
+        );
+    }
 }
