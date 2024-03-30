@@ -9,12 +9,15 @@ import com.zzmr.fgback.constant.ViewConstant;
 import com.zzmr.fgback.dto.AddRecipeDto;
 import com.zzmr.fgback.dto.MaterialsDto;
 import com.zzmr.fgback.dto.RecipeDto;
+import com.zzmr.fgback.exception.BaseException;
 import com.zzmr.fgback.mapper.*;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.RecipeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzmr.fgback.service.SearchHistoryService;
 import com.zzmr.fgback.util.ContextUtils;
+import com.zzmr.fgback.util.DishUtils;
+import com.zzmr.fgback.util.MinioUtils;
 import com.zzmr.fgback.util.RedisUtils;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeViews;
@@ -25,8 +28,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +66,9 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private MinioUtils minioUtils;
 
     /**
      * 根据菜谱id查询菜谱以及菜谱对应用料
@@ -127,6 +135,33 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
             userId = ContextUtils.getCurrentId();
         }
         return recipeMapper.getRecipeListByUserId(userId);
+    }
+
+    /**
+     * 菜品识别
+     *
+     * @param img
+     * @return
+     */
+    @Override
+    public PageResult recognition(MultipartFile img) {
+        if (img == null) {
+            throw new BaseException("文件为空！");
+        }
+        String imgUrl = minioUtils.upload(img);
+        String result = "";
+        try {
+            result = DishUtils.recognition(imgUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        log.info("是否要查询：{}", result);
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setPage(1);
+        recipeDto.setPageSize(100);
+        recipeDto.setTitle(result);
+        PageResult recipeList = getRecipeList(recipeDto);
+        return recipeList;
     }
 
     /**

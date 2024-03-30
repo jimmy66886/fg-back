@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -166,6 +167,23 @@ public class RecipeController {
         List<Recipe> list = recipeService.list();
         return Result.success(list);
     }
+
+    /**
+     * 1. 用户传来一张图片
+     * 2. 将图片上传到服务器，得到图片地址
+     * 3. 调用菜品识别工具类，得到响应结果
+     * 4. 根据响应结果，查询菜谱列表（菜谱名查询）
+     *
+     * @param img
+     * @return
+     */
+    @ApiOperation("菜谱识别")
+    @PostMapping("/recognition")
+    public PageResult upload(@RequestParam(name = "img") MultipartFile img) {
+        PageResult pageResult = recipeService.recognition(img);
+        return pageResult;
+    }
+
 
 }
 
