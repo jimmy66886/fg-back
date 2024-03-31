@@ -11,6 +11,7 @@ import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.UserService;
 import com.zzmr.fgback.util.JwtUtils;
 import com.zzmr.fgback.util.MinioUtils;
+import com.zzmr.fgback.vo.SearchUserVo;
 import com.zzmr.fgback.vo.UserLoginVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -148,6 +149,20 @@ public class UserController {
     public Result register(@RequestBody UserRegisterDto userRegisterDto) {
         userService.register(userRegisterDto);
         return Result.success();
+    }
+
+    /**
+     * 根据用户名查询用户信息
+     * 用户名是可以重复的，所以查询的结果是一个集合
+     *
+     * @param user
+     * @return
+     */
+    @ApiOperation("查询用户")
+    @PostMapping("/search")
+    public Result search(@RequestBody User user) {
+        List<SearchUserVo> searchUserVoList = userService.search(user);
+        return Result.success(searchUserVoList);
     }
 
 }

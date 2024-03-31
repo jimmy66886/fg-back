@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.zzmr.fgback.dto.UserLoginDto;
 import com.zzmr.fgback.dto.UserRegisterDto;
 import com.zzmr.fgback.dto.WxLoginDto;
+import com.zzmr.fgback.vo.SearchUserVo;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
@@ -64,7 +67,16 @@ public interface UserService extends IService<User> {
 
     /**
      * 获取用户信息
+     *
      * @return
      */
     User get();
+
+    /**
+     * 根据用户名查询用户信息
+     *
+     * @param user
+     * @return
+     */
+    List<SearchUserVo> search(User user);
 }

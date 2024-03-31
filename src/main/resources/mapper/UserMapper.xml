@@ -2,4 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzmr.fgback.mapper.UserMapper">
 
+    <select id="searchUserVo" resultType="com.zzmr.fgback.vo.SearchUserVo">
+        SELECT u.user_id,
+               u.nick_name,
+               u.avatar_url,
+               (SELECT COUNT(*)
+                FROM followers
+                WHERE follower_id = #{userId}
+                  AND following_id = u.user_id) AS isFollowed
+        FROM `user` u
+        WHERE u.nick_name LIKE CONCAT('%', #{nickName}, '%')
+          and u.user_id != #{userId}
+    </select>
+
 </mapper>

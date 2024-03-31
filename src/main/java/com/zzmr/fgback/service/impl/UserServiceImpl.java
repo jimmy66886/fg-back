@@ -13,6 +13,7 @@ import com.zzmr.fgback.properties.WechatProperties;
 import com.zzmr.fgback.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzmr.fgback.util.*;
+import com.zzmr.fgback.vo.SearchUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -201,6 +203,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User get() {
         Long userId = ContextUtils.getCurrentId();
         return userMapper.selectById(userId);
+    }
+
+    /**
+     * 根据用户名查询用户信息
+     * 该信息中应包含是否关注该用户
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public List<SearchUserVo> search(User user) {
+
+        // 需要用到查询用户的id
+        Long userId = ContextUtils.getCurrentId();
+        List<SearchUserVo> searchUserVoList = userMapper.searchUserVo(userId, user.getNickName());
+        return searchUserVoList;
     }
 
     /**
