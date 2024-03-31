@@ -22,6 +22,7 @@ import com.zzmr.fgback.util.RedisUtils;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeViews;
 import com.zzmr.fgback.vo.RecipeVo;
+import com.zzmr.fgback.vo.RecognitionVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +37,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>
@@ -144,7 +146,7 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
      * @return
      */
     @Override
-    public PageResult recognition(MultipartFile img) {
+    public RecognitionVo recognition(MultipartFile img) {
         if (img == null) {
             throw new BaseException("文件为空！");
         }
@@ -155,13 +157,21 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (Objects.equals(result, "非菜")) {
+            throw new BaseException("识别失败");
+        }
+
         log.info("是否要查询：{}", result);
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setPage(1);
         recipeDto.setPageSize(100);
         recipeDto.setTitle(result);
         PageResult recipeList = getRecipeList(recipeDto);
-        return recipeList;
+        if (recipeList.getTotal() == 0) {
+            throw new BaseException("识别失败");
+        }
+        return new RecognitionVo(recipeList, result);
     }
 
     /**

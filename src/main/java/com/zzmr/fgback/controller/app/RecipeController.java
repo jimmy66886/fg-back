@@ -12,6 +12,7 @@ import com.zzmr.fgback.service.RecipeService;
 import com.zzmr.fgback.util.RedisUtils;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeVo;
+import com.zzmr.fgback.vo.RecognitionVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -179,9 +180,9 @@ public class RecipeController {
      */
     @ApiOperation("菜谱识别")
     @PostMapping("/recognition")
-    public PageResult upload(@RequestParam(name = "img") MultipartFile img) {
-        PageResult pageResult = recipeService.recognition(img);
-        return pageResult;
+    public Result upload(@RequestParam(name = "img") MultipartFile img) {
+        RecognitionVo recognitionVo = recipeService.recognition(img);
+        return Result.success(recognitionVo);
     }
 
 

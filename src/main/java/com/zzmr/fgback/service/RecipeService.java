@@ -8,6 +8,7 @@ import com.zzmr.fgback.dto.RecipeDto;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeVo;
+import com.zzmr.fgback.vo.RecognitionVo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -100,5 +101,5 @@ public interface RecipeService extends IService<Recipe> {
      * @param img
      * @return
      */
-    PageResult recognition(MultipartFile img);
+    RecognitionVo recognition(MultipartFile img);
 }
