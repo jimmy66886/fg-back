@@ -19,4 +19,19 @@
                  LEFT JOIN `user` u ON f.follower_id = u.user_id
         WHERE f.following_id = #{followingId}
     </select>
+
+    <select id="getNewFans" resultType="com.zzmr.fgback.vo.FollowersVo">
+        SELECT u.user_id,
+               u.nick_name,
+               u.avatar_url,
+               f.create_time,
+               (SELECT COUNT(*)
+                FROM followers
+                WHERE follower_id = #{followingId}
+                  AND following_id = u.user_id) AS isFollowed
+        FROM followers f
+                 LEFT JOIN `user` u ON f.follower_id = u.user_id
+        WHERE f.following_id = #{followingId}
+          AND f.create_time BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW();
+    </select>
 </mapper>

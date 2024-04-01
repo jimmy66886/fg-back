@@ -34,4 +34,12 @@ public interface FollowersMapper extends BaseMapper<Followers> {
      * @return
      */
     List<FollowersVo> getFans(@Param("followingId") Long currentId);
+
+    /**
+     * 获取新增粉丝列表
+     *
+     * @param userId
+     * @return
+     */
+    List<FollowersVo> getNewFans(@Param("followingId") Long userId);
 }

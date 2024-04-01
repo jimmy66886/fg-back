@@ -99,4 +99,17 @@ public class FollowersServiceImpl extends ServiceImpl<FollowersMapper, Followers
                 .eq(Followers::getFollowingId, authorId));
         return followers != null;
     }
+
+    /**
+     * 获取新增粉丝
+     * 其实就是查询粉丝列表，但是时间限定在7天内，也就是说只查7天内的粉丝，就是新增粉丝
+     *
+     * @return
+     */
+    @Override
+    public List<FollowersVo> getNewFans() {
+        Long userId = ContextUtils.getCurrentId();
+        List<FollowersVo> fans = followersMapper.getNewFans(userId);
+        return fans;
+    }
 }

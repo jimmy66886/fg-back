@@ -66,6 +66,13 @@ public class FollowersController {
         return Result.success(isFollowed);
     }
 
+    @ApiOperation("查询新增粉丝")
+    @GetMapping("/getNewFans")
+    public Result getNewFans() {
+        List<FollowersVo> newFans = followersService.getNewFans();
+        return Result.success(newFans);
+    }
+
 
 }
 
