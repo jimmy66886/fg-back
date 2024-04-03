@@ -11,8 +11,11 @@ import com.zzmr.fgback.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzmr.fgback.util.ContextUtils;
 import com.zzmr.fgback.vo.CommentVo;
+import com.zzmr.fgback.vo.RecentCommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -82,5 +85,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 .or()
                 .eq(Comment::getRootId, commentId)
         );
+    }
+
+    /**
+     * 查询新增评论
+     *
+     * @return
+     */
+    @Override
+    public List<RecentCommentVo> getNewComment() {
+        Long userId = ContextUtils.getCurrentId();
+        return commentMapper.getNewComment(userId);
     }
 }

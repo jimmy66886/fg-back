@@ -51,4 +51,24 @@
           AND c.root_id = #{commentDto.rootId}
         ORDER BY c.create_time DESC
     </select>
+
+    <select id="getNewComment" resultType="com.zzmr.fgback.vo.RecentCommentVo">
+        SELECT c.comment_id,
+               u.nick_name   as sender_name,
+               u.avatar_url  as sender_avatar_url,
+               u.user_id     as sender_id,
+               c.content,
+               r.recipe_id,
+               r.title,
+               c.create_time as send_date_time,
+               rc.content    AS original_content
+        FROM `comment` c
+                 LEFT JOIN `user` u ON c.user_id = u.user_id
+                 LEFT JOIN recipe r ON c.recipe_id = r.recipe_id
+                 LEFT JOIN `comment` rc ON c.to_comment_id = rc.comment_id
+        WHERE (r.recipe_id IN (SELECT recipe_id FROM `comment` WHERE user_id = #{userId}) AND u.user_id != #{userId} AND
+               c.root_id IS NULL)
+           OR (c.to_user_id = 1 AND u.user_id != #{userId})
+        ORDER BY c.create_time DESC
+    </select>
 </mapper>

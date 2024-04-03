@@ -7,11 +7,14 @@ import com.zzmr.fgback.dto.DeleteCommentDto;
 import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.CommentService;
+import com.zzmr.fgback.vo.RecentCommentVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -64,6 +67,13 @@ public class CommentController {
     public Result delete(@RequestBody DeleteCommentDto dto) {
         commentService.delete(dto.getCommentId());
         return Result.success();
+    }
+
+    @ApiOperation("查询新增评论")
+    @GetMapping("/getNewComment")
+    public Result getNewComment() {
+        List<RecentCommentVo> recentCommentVos = commentService.getNewComment();
+        return Result.success(recentCommentVos);
     }
 
 }

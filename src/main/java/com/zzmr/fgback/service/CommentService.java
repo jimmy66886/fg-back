@@ -4,6 +4,9 @@ import com.zzmr.fgback.bean.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zzmr.fgback.dto.CommentDto;
 import com.zzmr.fgback.result.PageResult;
+import com.zzmr.fgback.vo.RecentCommentVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -44,4 +47,10 @@ public interface CommentService extends IService<Comment> {
      * @param commentId
      */
     void delete(Long commentId);
+
+    /**
+     * 查询新增评论
+     * @return
+     */
+    List<RecentCommentVo> getNewComment();
 }
