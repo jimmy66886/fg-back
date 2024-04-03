@@ -44,7 +44,7 @@
                CASE WHEN l.user_id IS NOT NULL THEN 1 ELSE 0 END                                         AS is_liked
         FROM comment c
                  LEFT JOIN user s ON c.user_id = s.user_id
-                 LEFT JOIN user r ON c.to_id = r.user_id
+                 LEFT JOIN user r ON c.to_user_id = r.user_id
                  LEFT JOIN likes l ON c.comment_id = l.content_id AND l.content_type = 'comment' AND
                                       l.user_id = #{commentDto.userId}
         WHERE c.recipe_id = #{commentDto.recipeId}

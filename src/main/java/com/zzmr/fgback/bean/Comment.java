@@ -42,7 +42,10 @@ public class Comment implements Serializable {
     private Long rootId;
 
     @ApiModelProperty(value = "被回复的评论id")
-    private Long toId;
+    private Long toCommentId;
+
+    @ApiModelProperty(value = "被回复的用户id")
+    private Long toUserId;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
