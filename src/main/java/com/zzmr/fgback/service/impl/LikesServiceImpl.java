@@ -8,8 +8,12 @@ import com.zzmr.fgback.mapper.LikesMapper;
 import com.zzmr.fgback.service.LikesService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzmr.fgback.util.ContextUtils;
+import com.zzmr.fgback.vo.LikeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * <p>
@@ -91,5 +95,27 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
                 .eq(Likes::getUserId, ContextUtils.getCurrentId())
                 .eq(Likes::getContentId, contentId)
         );
+    }
+
+    /**
+     * 查询收到的点赞
+     *
+     * @return
+     */
+    @Override
+    public List<LikeVo> getLikes() {
+
+        Long userId = ContextUtils.getCurrentId();
+        List<LikeVo> recipeLikes = likesMapper.getRecipeLikes(userId);
+        recipeLikes.forEach(item -> item.setLikeType("recipe"));
+
+        List<LikeVo> commentLikes = likesMapper.getCommentLikes(userId);
+        commentLikes.forEach(item -> item.setLikeType("comment"));
+        recipeLikes.addAll(commentLikes);
+
+        // 根据点赞时间降序排序
+        recipeLikes.sort((o1, o2) -> o2.getCreateTime().compareTo(o1.getCreateTime()));
+
+        return recipeLikes;
     }
 }

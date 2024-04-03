@@ -2,4 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzmr.fgback.mapper.LikesMapper">
 
+    <select id="getRecipeLikes" resultType="com.zzmr.fgback.vo.LikeVo">
+        SELECT l.content_id as recipe_id,
+               l.user_id,
+               u.nick_name,
+               u.avatar_url,
+               r.title      as content,
+               l.create_time
+        FROM likes l
+                 LEFT JOIN `user` u ON l.user_id = u.user_id
+                 LEFT JOIN recipe r ON r.recipe_id = l.content_id
+        WHERE l.user_id != #{userId}
+          AND l.content_type = 'recipe'
+          AND l.content_id IN (SELECT recipe_id
+                               FROM recipe
+                               WHERE recipe.author_id = #{userId})
+    </select>
+    <select id="getCommentLikes" resultType="com.zzmr.fgback.vo.LikeVo">
+        SELECT l.user_id,
+               u.nick_name,
+               u.avatar_url,
+               c.content,
+               c.recipe_id,
+               l.create_time
+        FROM likes l
+                 LEFT JOIN `user` u ON l.user_id = u.user_id
+                 LEFT JOIN `comment` c ON c.comment_id = l.content_id
+        WHERE l.user_id != #{userId}
+          AND l.content_type = 'comment'
+          AND l.content_id IN (SELECT comment_id FROM `comment` WHERE user_id = #{userId})
+    </select>
 </mapper>
