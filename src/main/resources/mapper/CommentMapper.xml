@@ -68,7 +68,7 @@
                  LEFT JOIN `comment` rc ON c.to_comment_id = rc.comment_id
         WHERE (r.recipe_id IN (SELECT recipe_id FROM `comment` WHERE user_id = #{userId}) AND u.user_id != #{userId} AND
                c.root_id IS NULL)
-           OR (c.to_user_id = 1 AND u.user_id != #{userId})
+           OR (c.to_user_id = #{userId} AND u.user_id != #{userId})
         ORDER BY c.create_time DESC
     </select>
 </mapper>
