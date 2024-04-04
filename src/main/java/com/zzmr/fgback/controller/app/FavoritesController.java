@@ -67,5 +67,12 @@ public class FavoritesController {
         return Result.success(favorites);
     }
 
+    @PostMapping("/delete")
+    @ApiOperation("根据收藏夹id删除收藏夹")
+    public Result deleteById(@RequestBody Long favoritesId) {
+        favoritesService.deleteById(favoritesId);
+        return Result.success();
+    }
+
 }
 

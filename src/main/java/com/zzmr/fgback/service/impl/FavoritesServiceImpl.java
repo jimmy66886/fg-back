@@ -1,5 +1,6 @@
 package com.zzmr.fgback.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zzmr.fgback.bean.Favorite;
 import com.zzmr.fgback.bean.Favorites;
 import com.zzmr.fgback.exception.BaseException;
@@ -15,6 +16,7 @@ import com.zzmr.fgback.vo.FavoritesVo;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -105,6 +107,19 @@ public class FavoritesServiceImpl extends ServiceImpl<FavoritesMapper, Favorites
     @Override
     public Favorites getFavoritesInfo(Long favoritesId) {
         return favoritesMapper.selectById(favoritesId);
+    }
+
+    /**
+     * 根据收藏夹id删除菜谱收藏夹
+     *
+     * @param favoritesId
+     */
+    @Override
+    @Transactional
+    public void deleteById(Long favoritesId) {
+        favoritesMapper.deleteById(favoritesId);
+        // 也要同时删除该收藏夹里的菜谱收藏
+        favoriteMapper.delete(new LambdaQueryWrapper<Favorite>().eq(Favorite::getFavoritesId, favoritesId));
     }
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author zzmr
@@ -19,18 +19,21 @@ public interface FavoritesService extends IService<Favorites> {
 
     /**
      * 获取用户所有的收藏夹
+     *
      * @return
      */
     List<FavoritesVo> getAllFavorites();
 
     /**
      * 添加一个收藏夹
+     *
      * @param favorites
      */
     Long insert(Favorites favorites);
 
     /**
      * 获取收藏夹的菜谱列表
+     *
      * @param favoritesId
      * @return
      */
@@ -38,8 +41,16 @@ public interface FavoritesService extends IService<Favorites> {
 
     /**
      * 根据收藏夹id获取收藏夹信息
+     *
      * @param favoritesId
      * @return
      */
     Favorites getFavoritesInfo(Long favoritesId);
+
+    /**
+     * 根据收藏夹id删除菜谱收藏夹
+     *
+     * @param favoritesId
+     */
+    void deleteById(Long favoritesId);
 }
