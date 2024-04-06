@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zzmr.fgback.bean.User;
+import com.zzmr.fgback.dto.AdminLoginDto;
 import com.zzmr.fgback.dto.UserLoginDto;
 import com.zzmr.fgback.dto.UserRegisterDto;
 import com.zzmr.fgback.dto.WxLoginDto;
@@ -62,7 +63,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return
      */
     @Override
-    public User login(UserLoginDto userLoginDto) {
+    public User loginByCode(UserLoginDto userLoginDto) {
         // 修改成可以用手机号或者邮箱登录
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
                 .eq(User::getEmail, userLoginDto.getEmail())
@@ -219,6 +220,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Long userId = ContextUtils.getCurrentId();
         List<SearchUserVo> searchUserVoList = userMapper.searchUserVo(userId, user.getNickName());
         return searchUserVoList;
+    }
+
+    /**
+     * 管理员登录
+     *
+     * @param adminLoginDto
+     * @return
+     */
+    @Override
+    public User login(AdminLoginDto adminLoginDto) {
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getAccount,
+                adminLoginDto.getAccount()));
+        if (user == null) {
+            throw new BaseException("账号不存在");
+        }
+
+        if (!adminLoginDto.getPassword().equals(user.getPassword())) {
+            throw new BaseException("账号或密码错误");
+        }
+
+        return user;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.zzmr.fgback.service;
 
 import com.zzmr.fgback.bean.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzmr.fgback.dto.AdminLoginDto;
 import com.zzmr.fgback.dto.UserLoginDto;
 import com.zzmr.fgback.dto.UserRegisterDto;
 import com.zzmr.fgback.dto.WxLoginDto;
@@ -26,7 +27,7 @@ public interface UserService extends IService<User> {
      * @param userLoginDto
      * @return
      */
-    User login(UserLoginDto userLoginDto);
+    User loginByCode(UserLoginDto userLoginDto);
 
     /**
      * 获取验证码
@@ -79,4 +80,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     List<SearchUserVo> search(User user);
+
+    /**
+     * 管理员登录
+     *
+     * @param adminLoginDto
+     * @return
+     */
+    User login(AdminLoginDto adminLoginDto);
 }

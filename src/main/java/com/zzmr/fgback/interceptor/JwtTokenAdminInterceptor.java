@@ -1,7 +1,9 @@
 package com.zzmr.fgback.interceptor;
 
 
+import com.zzmr.fgback.constant.JwtClaimsConstant;
 import com.zzmr.fgback.properties.JwtProperties;
+import com.zzmr.fgback.util.ContextUtils;
 import com.zzmr.fgback.util.JwtUtils;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
@@ -49,14 +51,12 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         try {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtils.parseJWT(jwtProperties.getAdminSecretKey(), token);
-            Long empId = Long.valueOf(claims.get("empId").toString());
-            log.info("当前员工id：{}", empId);
-            // 将empId存入ThreadLocal
-            // BaseContextByMe.setCurrentId(empId);
-            // 3、通过，放行
+            Long adminId = Long.valueOf(claims.get(JwtClaimsConstant.ADMIN_ID).toString());
+            log.info("当前管理员id：{}", adminId);
+            ContextUtils.setCurrentId(adminId);
             return true;
         } catch (Exception ex) {
-            // 4、不通过，响应401状态码
+            // 4、不通过，响应 401 状态码
             log.info("token已过期!");
             response.setStatus(401);
             return false;
