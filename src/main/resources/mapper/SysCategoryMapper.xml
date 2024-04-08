@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzmr.fgback.mapper.SysCategoryMapper">
+
+    <resultMap id="categoryVoResultMap" type="com.zzmr.fgback.vo.CategoryVo">
+        <id property="mainCategoryId" column="main_category_id"></id>
+        <result property="name" column="main_name"></result>
+        <collection property="categoryList" ofType="com.zzmr.fgback.bean.SysCategory">
+            <id property="categoryId" column="category_id"></id>
+            <result property="name" column="name"></result>
+            <result property="name" column="name"></result>
+            <result property="img" column="img"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getAllCategory" resultMap="categoryVoResultMap">
+        SELECT distinct mc.main_category_id,
+                        mc.NAME main_name,
+                        c.name,
+                        c.img,
+                        c.category_id
+        FROM main_category mc
+                 LEFT JOIN sys_category c ON c.main_category_id = mc.main_category_id
+    </select>
+</mapper>

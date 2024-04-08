@@ -1,6 +1,6 @@
 package com.zzmr.fgback.vo;
 
-import com.zzmr.fgback.bean.Category;
+import com.zzmr.fgback.bean.SysCategory;
 import lombok.Data;
 
 import java.util.List;
@@ -25,6 +25,6 @@ public class CategoryVo {
     /**
      * 大类下的所有分类
      */
-    private List<Category> categoryList;
+    private List<SysCategory> categoryList;
 
 }

@@ -32,11 +32,6 @@ public interface CategoryService extends IService<Category> {
      */
     List<Category> getAll();
 
-    /**
-     * 获取大类，以及大类下的分类
-     * @return
-     */
-    List<CategoryVo> getAllCategory();
 
     /**
      * 根据菜谱id获取菜谱的分类集合

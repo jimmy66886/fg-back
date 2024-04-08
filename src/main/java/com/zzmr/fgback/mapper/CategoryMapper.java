@@ -36,13 +36,6 @@ public interface CategoryMapper extends BaseMapper<Category> {
     List<Category> getAll();
 
     /**
-     * 查询所有大类以及大类下的分类
-     *
-     * @return
-     */
-    List<CategoryVo> getAllCategory();
-
-    /**
      * 批量插入分类
      *
      * @param categoryList

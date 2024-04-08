@@ -34,8 +34,4 @@ public class Category implements Serializable {
     @ApiModelProperty(value = "分类名")
     private String name;
 
-    @ApiModelProperty(value = "分类图片")
-    private String img;
-
-
 }

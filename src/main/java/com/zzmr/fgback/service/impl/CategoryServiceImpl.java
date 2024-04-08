@@ -66,17 +66,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     /**
-     * 获取大类，以及大类下的分类
-     *
-     * @return
-     */
-    @Override
-    public List<CategoryVo> getAllCategory() {
-        List<CategoryVo> categoryVoList = categoryMapper.getAllCategory();
-        return categoryVoList;
-    }
-
-    /**
      * 根据菜谱id获取菜谱的分类集合
      *
      * @param recipeId

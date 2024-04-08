@@ -28,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/app/category")
 @Api(tags = "分类相关接口")
+@CrossOrigin
 public class CategoryController {
 
     @Autowired
@@ -41,19 +42,12 @@ public class CategoryController {
      *
      * @return
      */
-    @ApiOperation("获取所有分类")
+    /*@ApiOperation("获取所有分类")
     @GetMapping("/getAll")
     public Result getAll() {
         List<Category> categoryList = categoryService.getAll();
         return Result.success(categoryList);
-    }
-
-    @ApiOperation("获取大类，以及大类下的分类")
-    @GetMapping("/getAllCategory")
-    public Result getAllCategory() {
-        List<CategoryVo> categoryVoList = categoryService.getAllCategory();
-        return Result.success(categoryVoList);
-    }
+    }*/
 
     /**
      * 由于分类和菜谱是多对多的关系，所以一个分类在表中会有多个id，这就导致根据id实现不了查询的效果
