@@ -3,14 +3,15 @@ package com.zzmr.fgback.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.zzmr.fgback.bean.User;
-import com.zzmr.fgback.dto.AdminLoginDto;
-import com.zzmr.fgback.dto.UserLoginDto;
-import com.zzmr.fgback.dto.UserRegisterDto;
-import com.zzmr.fgback.dto.WxLoginDto;
+import com.zzmr.fgback.constant.OrderConstant;
+import com.zzmr.fgback.dto.*;
 import com.zzmr.fgback.exception.BaseException;
 import com.zzmr.fgback.mapper.UserMapper;
 import com.zzmr.fgback.properties.WechatProperties;
+import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzmr.fgback.util.*;
@@ -157,12 +158,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 根据openid在数据库中查询,如果存在该openid则表示用户已注册,反之自动为用户进行注册
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getOpenid, openid));
         if (user == null) {
-            // 新用户,则进行注册
+            // 新用户,则进行注册 设置状态为0
             // 并设置默认的用户名和密码,用户名就用“微信用户+xxxx”四位数字表示
             user = User.builder().openid(openid).nickName("微信用户" + generateVerificationCode()).avatarUrl("http://47" +
-                    ".109.139.173:9000/food.guide/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F.jpg").build();
+                    ".109.139.173:9000/food.guide/%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F.jpg").status(Boolean.TRUE).build();
             userMapper.insert(user);
         }
+
+        // 2024年4月8日 09点48分
+        // 加上判断用户是否为启用状态  1 启用 0 禁用
+        if (!user.getStatus()) {
+            throw new BaseException("该用户已被封禁!");
+        }
+
         // 已注册,则直接返回
         return user;
     }
@@ -241,6 +249,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         return user;
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param searchUserDto
+     * @return
+     */
+    @Override
+    public PageResult getUserList(SearchUserDto searchUserDto) {
+        PageHelper.startPage(searchUserDto.getPage(), searchUserDto.getPageSize());
+        Page<User> userList =
+                (Page<User>) userMapper.selectList(new LambdaQueryWrapper<User>().like(User::getNickName,
+                        searchUserDto.getNickName()));
+        return new PageResult(userList.getTotal(), userList.getResult());
+    }
+
+    /**
+     * 改变用户状态
+     *
+     * @param user
+     */
+    @Override
+    public void changeStatus(User user) {
+        userMapper.updateById(user);
     }
 
     /**

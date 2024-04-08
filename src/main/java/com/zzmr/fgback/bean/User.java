@@ -68,5 +68,11 @@ public class User implements Serializable {
     @ApiModelProperty(value = "微信openid")
     private String openid;
 
+    /**
+     * 1启用
+     * 0禁用
+     */
+    @ApiModelProperty(value = "状态")
+    private Boolean status;
 
 }

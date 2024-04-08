@@ -2,10 +2,8 @@ package com.zzmr.fgback.service;
 
 import com.zzmr.fgback.bean.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.zzmr.fgback.dto.AdminLoginDto;
-import com.zzmr.fgback.dto.UserLoginDto;
-import com.zzmr.fgback.dto.UserRegisterDto;
-import com.zzmr.fgback.dto.WxLoginDto;
+import com.zzmr.fgback.dto.*;
+import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.vo.SearchUserVo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -88,4 +86,19 @@ public interface UserService extends IService<User> {
      * @return
      */
     User login(AdminLoginDto adminLoginDto);
+
+    /**
+     * 获取用户列表
+     *
+     * @param searchUserDto
+     * @return
+     */
+    PageResult getUserList(SearchUserDto searchUserDto);
+
+    /**
+     * 改变用户状态
+     *
+     * @param user
+     */
+    void changeStatus(User user);
 }

@@ -3,7 +3,9 @@ package com.zzmr.fgback.controller.admin;
 import com.zzmr.fgback.bean.User;
 import com.zzmr.fgback.constant.JwtClaimsConstant;
 import com.zzmr.fgback.dto.AdminLoginDto;
+import com.zzmr.fgback.dto.SearchUserDto;
 import com.zzmr.fgback.properties.JwtProperties;
+import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.UserService;
 import com.zzmr.fgback.util.JwtUtils;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,6 +56,20 @@ public class AdminController {
         BeanUtils.copyProperties(user, userLoginVo);
         userLoginVo.setToken(token);
         return Result.success(userLoginVo);
+    }
+
+    @PostMapping("/get")
+    @ApiOperation("条件分页查询用户列表")
+    public PageResult get(@RequestBody SearchUserDto searchUserDto) {
+        PageResult pageResult = userService.getUserList(searchUserDto);
+        return pageResult;
+    }
+
+    @PostMapping("/changeStatus")
+    @ApiOperation("改变用户状态")
+    public Result changeStatus(@RequestBody User user) {
+        userService.changeStatus(user);
+        return Result.success();
     }
 
 }
