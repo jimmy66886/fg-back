@@ -175,6 +175,34 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
     }
 
     /**
+     * 管理员查询菜谱列表,单独写是因为这里要查出来status
+     *
+     * @param recipeDto
+     * @return
+     */
+    @Override
+    public PageResult getRecipeListAdmin(RecipeDto recipeDto) {
+        // 下面是搜索正常逻辑
+        if (StringUtils.isEmpty(recipeDto.getOrderBy())) {
+            // 如果排序字段为空，那就是默认使用create_time降序排序
+            recipeDto.setOrderBy(OrderConstant.DEFAULT);
+        }
+        PageHelper.startPage(recipeDto.getPage(), recipeDto.getPageSize(), recipeDto.getOrderBy() + OrderConstant.DESC);
+        Page<RecipeBasicVo> page = recipeMapper.getRecipeListAdmin(recipeDto.getTitle());
+        return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * 修改菜谱状态
+     *
+     * @param recipe
+     */
+    @Override
+    public void changeStatus(Recipe recipe) {
+        recipeMapper.updateById(recipe);
+    }
+
+    /**
      * 分页查询菜谱列表
      * 有三种排序方式，默认是创建时间降序
      * 可选点赞/收藏数量降序

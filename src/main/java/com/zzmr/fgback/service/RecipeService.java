@@ -85,6 +85,7 @@ public interface RecipeService extends IService<Recipe> {
 
     /**
      * 根据用料名称查询菜谱
+     *
      * @param materialList
      * @return
      */
@@ -92,14 +93,31 @@ public interface RecipeService extends IService<Recipe> {
 
     /**
      * 查询用户所有的菜谱
+     *
      * @return
      */
     List<RecipeBasicVo> getByUserId(Long userId);
 
     /**
      * 菜谱识别
+     *
      * @param img
      * @return
      */
     RecognitionVo recognition(MultipartFile img);
+
+    /**
+     * 管理员查询菜谱列表,单独写是因为这里要查出来status
+     *
+     * @param recipeDto
+     * @return
+     */
+    PageResult getRecipeListAdmin(RecipeDto recipeDto);
+
+    /**
+     * 修改菜谱状态
+     *
+     * @param recipe
+     */
+    void changeStatus(Recipe recipe);
 }

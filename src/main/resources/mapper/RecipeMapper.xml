@@ -91,7 +91,7 @@
         FROM
         recipe r
         LEFT JOIN `user` ON r.author_id = `user`.user_id
-        WHERE recipe_id IN
+        WHERE r.status = 1 AND recipe_id IN
         (SELECT DISTINCT m.recipe_id FROM materials m WHERE m.`name` IN
         <foreach collection="materialsNameList" item="materialsName" open="(" separator="," close=")">
             #{materialsName}
@@ -118,6 +118,7 @@
         left join user u on r.author_id = u.user_id
         left join category c on r.recipe_id = c.recipe_id
         <where>
+            r.status = 1
             <if test="title!=null and title!=''">
                 r.title like CONCAT('%', #{title},'%') or c.name like CONCAT('%',#{title},'%')
             </if>
@@ -149,6 +150,31 @@
     <select id="getViews" resultType="com.zzmr.fgback.vo.RecipeViews">
         SELECT recipe_id, views
         FROM recipe
+    </select>
+
+    <select id="getRecipeListAdmin" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
+        select DISTINCT r.recipe_id,
+        r.title,
+        r.intro,
+        r.author_id,
+        r.image_url,
+        r.create_time,
+        r.update_time,
+        r.views,
+        r.status,
+        u.nick_name,
+        (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe')
+        AS like_number,
+        (SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id)
+        AS favorite_number
+        from recipe r
+        left join user u on r.author_id = u.user_id
+        left join category c on r.recipe_id = c.recipe_id
+        <where>
+            <if test="title!=null and title!=''">
+                r.title like CONCAT('%', #{title},'%') or c.name like CONCAT('%',#{title},'%')
+            </if>
+        </where>
     </select>
 
 </mapper>

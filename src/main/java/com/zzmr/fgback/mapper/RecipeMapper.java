@@ -64,4 +64,12 @@ public interface RecipeMapper extends BaseMapper<Recipe> {
      * @return
      */
     List<RecipeViews> getViews();
+
+    /**
+     * 管理员查询菜谱列表,单独写是因为这里要查出来status
+     *
+     * @param title
+     * @return
+     */
+    Page<RecipeBasicVo> getRecipeListAdmin(String title);
 }

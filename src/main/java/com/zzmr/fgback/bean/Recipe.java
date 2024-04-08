@@ -50,5 +50,11 @@ public class Recipe implements Serializable {
     @ApiModelProperty(value = "浏览量")
     private Integer views;
 
+    /**
+     * 1 表示正常
+     * 0 表示隐藏
+     */
+    @ApiModelProperty(value = "状态")
+    private Boolean status;
 
 }
