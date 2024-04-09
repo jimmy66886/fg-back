@@ -3,9 +3,7 @@ package com.zzmr.fgback.mapper;
 import com.github.pagehelper.Page;
 import com.zzmr.fgback.bean.Recipe;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zzmr.fgback.vo.RecipeBasicVo;
-import com.zzmr.fgback.vo.RecipeViews;
-import com.zzmr.fgback.vo.RecipeVo;
+import com.zzmr.fgback.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -72,4 +70,46 @@ public interface RecipeMapper extends BaseMapper<Recipe> {
      * @return
      */
     Page<RecipeBasicVo> getRecipeListAdmin(String title);
+
+    /**
+     * 获取今日新增
+     *
+     * @return
+     */
+    TodayVo getAddition();
+
+    /**
+     * 获取今日点赞最多的菜谱
+     *
+     * @return
+     */
+    RecipeBasicVo getLikeRecipe();
+
+    /**
+     * 获取今日收藏最多的菜谱
+     *
+     * @return
+     */
+    RecipeBasicVo getFavoriteRecipe();
+
+    /**
+     * 获取用户总量和菜谱总量
+     *
+     * @return
+     */
+    OverAllVo getOverall();
+
+    /**
+     * 获取点赞前十
+     *
+     * @return
+     */
+    List<RecipeBasicVo> getLikeTop10();
+
+    /**
+     * 获取收藏前十
+     *
+     * @return
+     */
+    List<RecipeBasicVo> getFavoriteTop10();
 }

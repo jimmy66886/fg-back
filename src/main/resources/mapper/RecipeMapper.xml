@@ -38,8 +38,8 @@
 
     </resultMap>
     <insert id="insertOne" useGeneratedKeys="true" keyProperty="recipeId">
-        insert into recipe(title, intro, author_id, image_url, views)
-        values (#{title}, #{intro}, #{authorId}, #{imageUrl}, #{views})
+        insert into recipe(title, intro, author_id, image_url, views, status)
+        values (#{title}, #{intro}, #{authorId}, #{imageUrl}, #{views}, #{status})
     </insert>
 
     <!-- 查询RecipeVo，包括基本信息、用料、步骤、点赞数、收藏数 -->
@@ -118,9 +118,11 @@
         left join user u on r.author_id = u.user_id
         left join category c on r.recipe_id = c.recipe_id
         <where>
-            r.status = 1
+            <if test="1==1">
+                and r.status = 1
+            </if>
             <if test="title!=null and title!=''">
-                r.title like CONCAT('%', #{title},'%') or c.name like CONCAT('%',#{title},'%')
+                and r.title like CONCAT('%', #{title},'%') or c.name like CONCAT('%',#{title},'%')
             </if>
         </where>
     </select>
@@ -175,6 +177,93 @@
                 r.title like CONCAT('%', #{title},'%') or c.name like CONCAT('%',#{title},'%')
             </if>
         </where>
+    </select>
+
+    <select id="getAddition" resultType="com.zzmr.fgback.vo.TodayVo">
+        SELECT recipeAddition,
+               userAddition
+        FROM (SELECT COUNT(*) AS recipeAddition FROM recipe WHERE DATE(create_time) = CURDATE()) AS r,
+             (SELECT COUNT(*) AS userAddition FROM user WHERE DATE(create_time) = CURDATE()) AS u;
+    </select>
+
+    <select id="getLikeRecipe" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
+        SELECT r.recipe_id,
+               r.title,
+               r.intro,
+               r.author_id,
+               r.image_url,
+               r.create_time,
+               r.update_time,
+               r.views,
+               u.nick_name,
+               (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe') AS like_number,
+               (SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id)                           AS favorite_number
+        FROM recipe r
+                 LEFT JOIN USER u ON r.author_id = u.user_id
+        WHERE DATE(r.create_time) = CURRENT_DATE
+        ORDER BY like_number DESC
+        LIMIT 1
+    </select>
+
+    <select id="getFavoriteRecipe" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
+        SELECT r.recipe_id,
+               r.title,
+               r.intro,
+               r.author_id,
+               r.image_url,
+               r.create_time,
+               r.update_time,
+               r.views,
+               u.nick_name,
+               (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe') AS like_number,
+               (SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id)                           AS favorite_number
+        FROM recipe r
+                 LEFT JOIN USER u ON r.author_id = u.user_id
+        WHERE DATE(r.create_time) = CURRENT_DATE
+        ORDER BY favorite_number DESC
+        LIMIT 1
+    </select>
+    <select id="getOverall" resultType="com.zzmr.fgback.vo.OverAllVo">
+        SELECT userNumber,
+               recipeNumber
+        FROM (SELECT COUNT(*) AS userNumber FROM user) AS r,
+             (SELECT COUNT(*) AS recipeNumber FROM recipe) AS u;
+    </select>
+
+    <select id="getLikeTop10" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
+        SELECT r.recipe_id,
+               r.title,
+               r.intro,
+               r.author_id,
+               r.image_url,
+               r.create_time,
+               r.update_time,
+               r.views,
+               u.nick_name,
+               (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe') AS like_number,
+               (SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id)                           AS favorite_number
+        FROM recipe r
+                 LEFT JOIN USER u ON r.author_id = u.user_id
+        ORDER BY like_number DESC
+        LIMIT 10
+    </select>
+
+    <select id="getFavoriteTop10" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
+        SELECT r.recipe_id,
+               r.title,
+               r.intro,
+               r.author_id,
+               r.image_url,
+               r.create_time,
+               r.update_time,
+               r.views,
+               u.nick_name,
+               (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe') AS like_number,
+               (SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id)                           AS favorite_number
+        FROM recipe r
+                 LEFT JOIN USER u ON r.author_id = u.user_id
+        ORDER BY favorite_number DESC
+        LIMIT 10
     </select>
 
 </mapper>

@@ -273,6 +273,7 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
         BeanUtils.copyProperties(addRecipeDto, recipe);
         recipe.setViews(0);
         recipe.setAuthorId(ContextUtils.getCurrentId());
+        recipe.setStatus(Boolean.TRUE);
         recipeMapper.insertOne(recipe);
         // 得到主键
         insertOthers(addRecipeDto, recipe);
