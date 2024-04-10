@@ -137,6 +137,27 @@ class FgBackApplicationTests {
         keys.forEach(System.out::println);
     }
 
+    @Test
+    public void testMap() {
+        // 创建一个 HashMap
+        Map<String, String> map = new HashMap<>();
+        map.put("key1", "value1");
+        map.put("key2", "value2");
+        map.put("key3", "value3");
+
+        // 存储 HashMap
+        redisUtils.setHash("myHash", map);
+
+        // 获取 HashMap
+        Map<String, String> storedMap = redisUtils.getHash("myHash");
+        if (storedMap != null) {
+            for (Map.Entry<String, String> entry : storedMap.entrySet()) {
+                System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+            }
+        }
+    }
+
+
 }
 
 @Data

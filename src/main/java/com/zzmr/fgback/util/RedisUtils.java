@@ -6,12 +6,15 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -127,6 +130,29 @@ public class RedisUtils {
         if (jsonString != null) {
             JSONArray jsonArray = JSONUtil.parseArray(jsonString);
             return jsonArray.toList(classOfT);
+        }
+        return null;
+    }
+
+    /**
+     * 存储Hash类型的值
+     */
+    public <T> void setHash(String key, Map<String, T> map) {
+        if (StrUtil.isNotBlank(key) && map != null) {
+            HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+            Map<String, Object> valueMap = new HashMap<>();
+            map.forEach((hashKey, value) -> valueMap.put(hashKey, value.toString()));
+            hashOperations.putAll(key, valueMap);
+        }
+    }
+
+    /**
+     * 获取Hash类型的值
+     */
+    public Map<String, String> getHash(String key) {
+        if (StrUtil.isNotBlank(key)) {
+            HashOperations<String, String, String> hashOperations = redisTemplate.opsForHash();
+            return hashOperations.entries(key);
         }
         return null;
     }
