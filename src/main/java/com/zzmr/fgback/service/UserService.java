@@ -101,4 +101,10 @@ public interface UserService extends IService<User> {
      * @param user
      */
     void changeStatus(User user);
+
+    /**
+     * 修改密码
+     * @param changePwdDto
+     */
+    void changePwd(ChangePwdDto changePwdDto);
 }

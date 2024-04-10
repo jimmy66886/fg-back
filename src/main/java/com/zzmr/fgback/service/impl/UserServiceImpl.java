@@ -22,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * <p>
@@ -274,6 +271,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void changeStatus(User user) {
         userMapper.updateById(user);
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param changePwdDto
+     */
+    @Override
+    public void changePwd(ChangePwdDto changePwdDto) {
+        // 先查询旧密码是否相等
+        User userDb = userMapper.selectById(ContextUtils.getCurrentId());
+        if (userDb == null) {
+            throw new BaseException("账号为空！");
+        }
+        if (!Objects.equals(userDb.getPassword(), changePwdDto.getOldPwd())) {
+            throw new BaseException("原密码错误");
+        }
+
+        /**
+         * 新旧密码相同
+         */
+        if (Objects.equals(changePwdDto.getNewPwd(), changePwdDto.getOldPwd())) {
+            throw new BaseException("新旧密码不能相同！");
+        }
+
+        userDb.setPassword(changePwdDto.getNewPwd());
+        userMapper.updateById(userDb);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.zzmr.fgback.controller.admin;
 import com.zzmr.fgback.bean.User;
 import com.zzmr.fgback.constant.JwtClaimsConstant;
 import com.zzmr.fgback.dto.AdminLoginDto;
+import com.zzmr.fgback.dto.ChangePwdDto;
 import com.zzmr.fgback.dto.SearchUserDto;
 import com.zzmr.fgback.properties.JwtProperties;
 import com.zzmr.fgback.result.PageResult;
@@ -69,6 +70,13 @@ public class AdminController {
     @ApiOperation("改变用户状态")
     public Result changeStatus(@RequestBody User user) {
         userService.changeStatus(user);
+        return Result.success();
+    }
+
+    @PostMapping("/changePwd")
+    @ApiOperation("修改密码")
+    public Result changePwd(@RequestBody ChangePwdDto changePwdDto) {
+        userService.changePwd(changePwdDto);
         return Result.success();
     }
 
