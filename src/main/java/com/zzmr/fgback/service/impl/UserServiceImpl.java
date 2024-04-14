@@ -165,7 +165,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 2024年4月8日 09点48分
         // 加上判断用户是否为启用状态  1 启用 0 禁用
         if (!user.getStatus()) {
-            throw new BaseException("该用户已被封禁!");
+            throw new BaseException("您的账户已被封禁!");
         }
 
         // 已注册,则直接返回
@@ -208,7 +208,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User get() {
         Long userId = ContextUtils.getCurrentId();
-        return userMapper.selectById(userId);
+        User user = userMapper.selectById(userId);
+        if (!user.getStatus()) {
+            throw new BaseException("您的账户已被封禁");
+        }
+        return user;
     }
 
     /**

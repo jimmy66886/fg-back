@@ -6,6 +6,7 @@ import com.zzmr.fgback.constant.JwtClaimsConstant;
 import com.zzmr.fgback.dto.UserLoginDto;
 import com.zzmr.fgback.dto.UserRegisterDto;
 import com.zzmr.fgback.dto.WxLoginDto;
+import com.zzmr.fgback.exception.BaseException;
 import com.zzmr.fgback.properties.JwtProperties;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.UserService;
@@ -87,6 +88,9 @@ public class UserController {
     @GetMapping("/getById")
     public Result getById(@RequestParam Long userId) {
         User user = userService.getById(userId);
+        if (!user.getStatus()) {
+            throw new BaseException("您的账户已被封禁");
+        }
         return Result.success(user);
     }
 
