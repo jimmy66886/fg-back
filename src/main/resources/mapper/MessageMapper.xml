@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzmr.fgback.mapper.MessageMapper">
+
+    <insert id="insertAll">
+        insert into message(title, message, user_id) VALUES
+        <foreach collection="messageList" item="item" separator=",">
+            (
+            #{item.title},#{item.message},#{item.userId}
+            )
+        </foreach>
+    </insert>
+</mapper>
