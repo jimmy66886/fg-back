@@ -151,14 +151,14 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
             throw new BaseException("文件为空！");
         }
         String imgUrl = minioUtils.upload(img);
-        String result = "";
+        List<String> result = new ArrayList<>();
         try {
             result = DishUtils.recognition(imgUrl);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (Objects.equals(result, "非菜")) {
+        if (Objects.equals(result.get(0), "非菜")) {
             throw new BaseException("识别失败");
         }
 
@@ -166,12 +166,17 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
         RecipeDto recipeDto = new RecipeDto();
         recipeDto.setPage(1);
         recipeDto.setPageSize(100);
-        recipeDto.setTitle(result);
-        PageResult recipeList = getRecipeList(recipeDto);
-        if (recipeList.getTotal() == 0) {
-            throw new BaseException("识别失败");
-        }
-        return new RecognitionVo(recipeList, result);
+        PageResult recipeList = getRecipeListByRec(recipeDto, result);
+        StringBuilder resultString = new StringBuilder();
+        result.forEach(item -> resultString.append(item + "/ "));
+        return new RecognitionVo(recipeList, resultString.toString());
+    }
+
+    private PageResult getRecipeListByRec(RecipeDto recipeDto, List<String> result) {
+        recipeDto.setOrderBy(OrderConstant.DEFAULT);
+        PageHelper.startPage(recipeDto.getPage(), recipeDto.getPageSize(), recipeDto.getOrderBy() + OrderConstant.DESC);
+        Page<RecipeBasicVo> page = recipeMapper.getRecipeListRec(result);
+        return new PageResult(page.getTotal(), page.getResult());
     }
 
     /**

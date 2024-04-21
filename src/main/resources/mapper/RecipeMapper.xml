@@ -266,4 +266,29 @@
         LIMIT 10
     </select>
 
+    <select id="getRecipeListRec" resultType="com.zzmr.fgback.vo.RecipeBasicVo">
+        select DISTINCT r.recipe_id,
+        r.title,
+        r.intro,
+        r.author_id,
+        r.image_url,
+        r.create_time,
+        r.update_time,
+        r.views,
+        u.nick_name,
+        (SELECT COUNT(*) FROM likes WHERE content_id = r.recipe_id AND content_type = 'recipe')
+        AS like_number,
+        (SELECT COUNT(*) FROM favorite WHERE recipe_id = r.recipe_id)
+        AS favorite_number
+        from recipe r
+        left join user u on r.author_id = u.user_id
+        left join category c on r.recipe_id = c.recipe_id
+        WHERE r.status = 1
+        AND (
+        <foreach collection="titleList" item="title" open="" separator="OR" close="">
+            r.title LIKE CONCAT('%', #{title}, '%') or c.name like CONCAT('%',#{title},'%')
+        </foreach>
+        )
+    </select>
+
 </mapper>

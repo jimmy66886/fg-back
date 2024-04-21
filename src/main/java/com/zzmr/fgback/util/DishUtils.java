@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 菜品识别
@@ -38,7 +40,7 @@ public class DishUtils {
      * 直接调用这个方法,方法返回最接近的菜品名
      * 用的时候直接将图片链接传进来就行
      */
-    public static String recognition(String filePath) throws IOException {
+    public static List<String> recognition(String filePath) throws IOException {
         String accessToken = getAccessToken();
         // 请求url
         String url = "https://aip.baidubce.com/rest/2.0/image-classify/v2/dish";
@@ -52,12 +54,16 @@ public class DishUtils {
 
             // 注意这里仅为了简化编码每一次请求都去获取access_token，线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。
             String result = HttpUtil.post(url, accessToken, param);
-            // 解析result，输出最接近的那个name,也就是数组第一项
+            // 解析result，提取所有name并添加到List中
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(result);
             JsonNode resultArray = jsonNode.get("result");
-            String mostProbabilityName = resultArray.get(0).get("name").asText();
-            return mostProbabilityName;
+            List<String> names = new ArrayList<>();
+            for (JsonNode item : resultArray) {
+                String name = item.get("name").asText();
+                names.add(name);
+            }
+            return names;
         } catch (Exception e) {
             e.printStackTrace();
         }

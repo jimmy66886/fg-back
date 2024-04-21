@@ -112,4 +112,6 @@ public interface RecipeMapper extends BaseMapper<Recipe> {
      * @return
      */
     List<RecipeBasicVo> getFavoriteTop10();
+
+    Page<RecipeBasicVo> getRecipeListRec(@Param("titleList") List<String> result);
 }

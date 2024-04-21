@@ -16,8 +16,8 @@ public class BceTest {
     @Test
     public void test() throws IOException {
         // 将图片链接传入即可
-        String result = DishUtils.recognition("http://47.109.139.173:9000/food.guide/%E5%86%B0%E7%B2%89.jpg");
-        System.out.println("您是否要找:" + result);
+        // String result = DishUtils.recognition("http://47.109.139.173:9000/food.guide/%E5%86%B0%E7%B2%89.jpg");
+        // System.out.println("您是否要找:" + result);
     }
 
 }
