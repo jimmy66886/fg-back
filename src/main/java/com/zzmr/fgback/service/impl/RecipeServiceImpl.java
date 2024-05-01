@@ -72,6 +72,9 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
     @Autowired
     private MinioUtils minioUtils;
 
+    @Autowired
+    private FavoriteMapper favoriteMapper;
+
     /**
      * 根据菜谱id查询菜谱以及菜谱对应用料
      *
@@ -248,6 +251,9 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
                 .eq(RecipeStep::getRecipeId, recipeId));
         materialsMapper.delete(new LambdaQueryWrapper<Materials>()
                 .eq(Materials::getRecipeId, recipeId));
+        // 漏删了,还要把收藏给删了
+        favoriteMapper.delete(new LambdaQueryWrapper<Favorite>()
+                .eq(Favorite::getRecipeId, recipeId));
     }
 
     /**
