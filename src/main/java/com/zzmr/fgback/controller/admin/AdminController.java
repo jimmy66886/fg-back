@@ -10,6 +10,7 @@ import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.result.Result;
 import com.zzmr.fgback.service.UserService;
 import com.zzmr.fgback.util.JwtUtils;
+import com.zzmr.fgback.util.SensitiveUtil;
 import com.zzmr.fgback.vo.UserLoginVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +41,9 @@ public class AdminController {
 
     @Autowired
     private JwtProperties jwtProperties;
+
+    @Autowired
+    private SensitiveUtil sensitiveUtil;
 
     @PostMapping("/login")
     @ApiOperation("管理员登陆")
@@ -77,6 +83,17 @@ public class AdminController {
     @ApiOperation("修改密码")
     public Result changePwd(@RequestBody ChangePwdDto changePwdDto) {
         userService.changePwd(changePwdDto);
+        return Result.success();
+    }
+
+    @PostMapping("/uploadSensitive")
+    @ApiOperation("上传敏感词库")
+    public Result uploadSensitive(@RequestParam("file") MultipartFile file){
+        try {
+            sensitiveUtil.setSensitive(file.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return Result.success();
     }
 

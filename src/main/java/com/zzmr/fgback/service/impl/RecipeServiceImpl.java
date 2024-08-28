@@ -15,10 +15,7 @@ import com.zzmr.fgback.result.PageResult;
 import com.zzmr.fgback.service.RecipeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zzmr.fgback.service.SearchHistoryService;
-import com.zzmr.fgback.util.ContextUtils;
-import com.zzmr.fgback.util.DishUtils;
-import com.zzmr.fgback.util.MinioUtils;
-import com.zzmr.fgback.util.RedisUtils;
+import com.zzmr.fgback.util.*;
 import com.zzmr.fgback.vo.RecipeBasicVo;
 import com.zzmr.fgback.vo.RecipeViews;
 import com.zzmr.fgback.vo.RecipeVo;
@@ -34,10 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * <p>
@@ -74,6 +68,9 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
 
     @Autowired
     private FavoriteMapper favoriteMapper;
+
+    @Autowired
+    private SensitiveUtil sensitiveUtil;
 
     /**
      * 根据菜谱id查询菜谱以及菜谱对应用料
@@ -280,6 +277,15 @@ public class RecipeServiceImpl extends ServiceImpl<RecipeMapper, Recipe> impleme
     @Override
     @Transactional
     public void addRecipe(AddRecipeDto addRecipeDto) {
+
+        // 获取敏感词库
+        List<String> sensitive = sensitiveUtil.getSensitive();
+        for (String s : sensitive) {
+            if (addRecipeDto.getTitle().contains(s)||addRecipeDto.getIntro().contains(s)){
+                throw new BaseException("请不要包含敏感词:"+s);
+            }
+        }
+
         Recipe recipe = new Recipe();
         BeanUtils.copyProperties(addRecipeDto, recipe);
         recipe.setViews(0);

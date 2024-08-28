@@ -49,7 +49,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         log.info("开始注册自定义拦截器...");
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/user/login");
+                .excludePathPatterns("/admin/user/login")
+                .excludePathPatterns("/admin/user/uploadSensitive");
         registry.addInterceptor(jwtTokenUserInterceptor)
                 .addPathPatterns("/app/**")
                 .excludePathPatterns("/app/user/login")
@@ -62,8 +63,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/app/recipe/getByMaterials")
                 .excludePathPatterns("/app/category/getAll")
                 .excludePathPatterns("/app/oneWord/get")
-                .excludePathPatterns("/upload")
-        ;
+                .excludePathPatterns("/upload");
     }
 
     /**
